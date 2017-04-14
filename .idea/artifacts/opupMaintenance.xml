@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="opupMaintenance">
+    <output-path>$PROJECT_DIR$/out/artifacts/opupMaintenance</output-path>
+    <root id="archive" name="opupMaintenance.jar">
+      <element id="module-output" name="opupMaintenance" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="customer_Coetc">
+    <output-path>$PROJECT_DIR$/out/artifacts/customer_Coetc</output-path>
+    <root id="archive" name="customer_Coetc.jar">
+      <element id="module-output" name="customer_Coetc" />
+    </root>
+  </artifact>
+</component>

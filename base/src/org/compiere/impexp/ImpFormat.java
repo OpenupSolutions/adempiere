@@ -504,7 +504,7 @@ public final class ImpFormat
 	 */
 	public boolean updateDB (Properties ctx, String line, String trxName)
 	{
-		if (line == null || line.trim().length() == 0)
+			if (line == null || line.trim().length() == 0)
 		{
 			log.finest("No Line");
 			return false;

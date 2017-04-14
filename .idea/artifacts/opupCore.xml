@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="opupCore">
+    <output-path>$PROJECT_DIR$/out/artifacts/opupCore</output-path>
+    <root id="archive" name="opupCore.jar">
+      <element id="module-output" name="opupCore" />
+    </root>
+  </artifact>
+</component>

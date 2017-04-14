@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="customization">
+    <output-path>$PROJECT_DIR$/out/artifacts/customization</output-path>
+    <root id="archive" name="customization.jar">
+      <element id="module-output" name="opupCustomization382" />
+    </root>
+  </artifact>
+</component>
