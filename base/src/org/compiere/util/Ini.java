@@ -426,28 +426,25 @@ public final class Ini implements Serializable
 		boolean firstTime = false;
 		s_prop = new Properties();
 		FileInputStream fis = null;
-		try
-		{
+		try {
 			fis = new FileInputStream(filename);
 			s_prop.load(fis);
-			fis.close();
-		}
-		catch (FileNotFoundException e)
-		{
+		} catch (FileNotFoundException e) {
 			log.warning(filename + " not found");
 			loadOK = false;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			log.log(Level.SEVERE, filename + " - " + e.toString());
 			loadOK = false;
-		}
-		catch (Throwable t)
-		{
+		} catch (Throwable t) {
 			log.log(Level.SEVERE, filename + " - " + t.toString());
 			loadOK = false;
+		} finally {
+			if (fis != null) {
+				try {fis.close();} catch (IOException ex) { }// ignored 
+			}
 		}
-		if (!loadOK || s_prop.getProperty(P_TODAY, "").equals(""))
+
+		if (!loadOK || s_prop.getProperty(P_TODAY, "").isEmpty())
 		{
 			log.config(filename);
 			firstTime = true;
