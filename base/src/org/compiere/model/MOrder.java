@@ -28,7 +28,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.exceptions.BPartnerNoBillToAddressException;
 import org.adempiere.exceptions.BPartnerNoShipToAddressException;
 import org.adempiere.exceptions.FillMandatoryException;
@@ -453,17 +452,17 @@ public class MOrder extends X_C_Order implements DocAction
 			setM_PriceList_ID(ii);
 		//	Default Delivery/Via Rule
 		String ss = bp.getDeliveryRule();
-		if (ss != null)
+		if (ss != null && ss.trim().length() != 0)
 			setDeliveryRule(ss);
 		ss = bp.getDeliveryViaRule();
-		if (ss != null)
+		if (ss != null && ss.trim().length() != 0)
 			setDeliveryViaRule(ss);
 		//	Default Invoice/Payment Rule
 		ss = bp.getInvoiceRule();
-		if (ss != null)
+		if (ss != null && ss.trim().length() != 0)
 			setInvoiceRule(ss);
 		ss = bp.getPaymentRule();
-		if (ss != null)
+		if (ss != null && ss.trim().length() != 0)
 			setPaymentRule(ss);
 		//	Sales Rep
 		ii = bp.getSalesRep_ID();
@@ -1228,9 +1227,6 @@ public class MOrder extends X_C_Order implements DocAction
 			}
 		}	//	convert DocType
 
-		//	Mandatory Product Attribute Set Instance
-		isASIMandatory();
-
 		//	Lines
 		if (explodeBOM())
 			lines = getLines(true, MOrderLine.COLUMNNAME_M_Product_ID);
@@ -1412,6 +1408,7 @@ public class MOrder extends X_C_Order implements DocAction
 	 */
 	private boolean reserveStock (MDocType dt, MOrderLine[] lines)
 	{
+
 		if (dt == null)
 			dt = MDocType.get(getCtx(), getC_DocType_ID());
 
@@ -1449,9 +1446,7 @@ public class MOrder extends X_C_Order implements DocAction
 			}
 			//	Binding
 			BigDecimal target = binding ? line.getQtyOrdered() : Env.ZERO; 
-			BigDecimal difference = target
-				.subtract(line.getQtyReserved())
-				.subtract(line.getQtyDelivered()); 
+			BigDecimal difference = target.subtract(line.getQtyReserved()).subtract(line.getQtyDelivered());
 			if (difference.signum() == 0)
 			{
 				MProduct product = line.getProduct();
@@ -1474,6 +1469,9 @@ public class MOrder extends X_C_Order implements DocAction
 			{
 				if (product.isStocked())
 				{
+					//	Mandatory Product Attribute Set Instance
+					MAttributeSet.validateAttributeSetInstanceMandatory(product, line.Table_ID, isSOTrx() , line.getM_AttributeSetInstance_ID());
+
 					BigDecimal ordered = isSOTrx ? Env.ZERO : difference;
 					BigDecimal reserved = isSOTrx ? difference : Env.ZERO;
 					int M_Locator_ID = 0; 
@@ -2469,7 +2467,7 @@ public class MOrder extends X_C_Order implements DocAction
 	}
 	
 	//Mandatory Product Attribute Set Instance
-	private void isASIMandatory()
+	/*private void isASIMandatory()
 	{
 		for(MOrderLine ol : getLines())
 		{
@@ -2488,5 +2486,5 @@ public class MOrder extends X_C_Order implements DocAction
 				}
 			}
 		}
-	}
+	}*/
 }	//	MOrder

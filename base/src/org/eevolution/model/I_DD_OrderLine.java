@@ -22,7 +22,7 @@ import org.compiere.util.KeyNamePair;
 
 /** Generated Interface for DD_OrderLine
  *  @author Adempiere (generated) 
- *  @version Release 3.8.0
+ *  @version Release 3.9.0
  */
 public interface I_DD_OrderLine 
 {
@@ -119,6 +119,36 @@ public interface I_DD_OrderLine
 	public int getC_Charge_ID();
 
 	public org.compiere.model.I_C_Charge getC_Charge() throws RuntimeException;
+
+    /** Column name C_ProjectPhase_ID */
+    public static final String COLUMNNAME_C_ProjectPhase_ID = "C_ProjectPhase_ID";
+
+	/** Set Project Phase.
+	  * Phase of a Project
+	  */
+	public void setC_ProjectPhase_ID (int C_ProjectPhase_ID);
+
+	/** Get Project Phase.
+	  * Phase of a Project
+	  */
+	public int getC_ProjectPhase_ID();
+
+	public org.compiere.model.I_C_ProjectPhase getC_ProjectPhase() throws RuntimeException;
+
+    /** Column name C_ProjectTask_ID */
+    public static final String COLUMNNAME_C_ProjectTask_ID = "C_ProjectTask_ID";
+
+	/** Set Project Task.
+	  * Actual Project Task in a Phase
+	  */
+	public void setC_ProjectTask_ID (int C_ProjectTask_ID);
+
+	/** Get Project Task.
+	  * Actual Project Task in a Phase
+	  */
+	public int getC_ProjectTask_ID();
+
+	public org.compiere.model.I_C_ProjectTask getC_ProjectTask() throws RuntimeException;
 
     /** Column name C_Project_ID */
     public static final String COLUMNNAME_C_Project_ID = "C_Project_ID";
@@ -588,6 +618,36 @@ public interface I_DD_OrderLine
 	public int getUser2_ID();
 
 	public org.compiere.model.I_C_ElementValue getUser2() throws RuntimeException;
+
+    /** Column name User3_ID */
+    public static final String COLUMNNAME_User3_ID = "User3_ID";
+
+	/** Set User List 3.
+	  * User defined list element #3
+	  */
+	public void setUser3_ID (int User3_ID);
+
+	/** Get User List 3.
+	  * User defined list element #3
+	  */
+	public int getUser3_ID();
+
+	public org.compiere.model.I_C_ElementValue getUser3() throws RuntimeException;
+
+    /** Column name User4_ID */
+    public static final String COLUMNNAME_User4_ID = "User4_ID";
+
+	/** Set User List 4.
+	  * User defined list element #4
+	  */
+	public void setUser4_ID (int User4_ID);
+
+	/** Get User List 4.
+	  * User defined list element #4
+	  */
+	public int getUser4_ID();
+
+	public org.compiere.model.I_C_ElementValue getUser4() throws RuntimeException;
 
     /** Column name WM_InOutBoundLine_ID */
     public static final String COLUMNNAME_WM_InOutBoundLine_ID = "WM_InOutBoundLine_ID";

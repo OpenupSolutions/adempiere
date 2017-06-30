@@ -613,7 +613,7 @@ public final class DB
         if (no == 1)
         {
             JOptionPane.showMessageDialog (null,
-                "Start RUN_Migrate (in utils)\nSee: http://www.adempiere.com/maintain",
+                "Start RUN_Migrate (in utils)\nSee: http://wiki.adempiere.net/maintain",
                 title, JOptionPane.INFORMATION_MESSAGE);
             Env.exitEnv(1);
         }
@@ -1776,7 +1776,16 @@ public final class DB
 	public static int getNextID (int AD_Client_ID, String TableName, String trxName)
 	{
 		boolean SYSTEM_NATIVE_SEQUENCE = MSysConfig.getBooleanValue("SYSTEM_NATIVE_SEQUENCE",false);
-		boolean adempiereSys = Ini.isPropertyBool(Ini.P_ADEMPIERESYS);
+		boolean adempiereSys = false;
+		if (Ini.isClient())
+		{
+			adempiereSys = Ini.isPropertyBool(Ini.P_ADEMPIERESYS);
+		}
+		else
+		{
+			String sysProperty = Env.getCtx().getProperty("AdempiereSys", "N");
+			adempiereSys = "y".equalsIgnoreCase(sysProperty) || "true".equalsIgnoreCase(sysProperty);
+		}
 
 		if(SYSTEM_NATIVE_SEQUENCE && !adempiereSys)
 		{
@@ -1900,7 +1909,7 @@ public final class DB
 		return false;
 	}	//	isRemoteObjects
 
-	/**
+	/**x
 	 * 	Is this a remote client connection
 	 *
 	 *  Deprecated, always return false.
@@ -2406,4 +2415,38 @@ public final class DB
 		}
 		return false;
 	}
+
+	public static int[] getIDsEx(String trxName, String sql, Object ... params) throws DBException
+	{
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        try
+        {
+            pstmt = DB.prepareStatement(sql, trxName);
+            setParameters(pstmt, params);
+            rs = pstmt.executeQuery();
+            while (rs.next())
+            {
+                list.add(rs.getInt(1));
+            }
+        }
+        catch (SQLException e)
+        {
+    		throw new DBException(e, sql);
+        }
+        finally
+        {
+            close(rs, pstmt);
+            rs= null;
+            pstmt = null;
+        }
+		//	Convert to array
+		int[] retValue = new int[list.size()];
+		for (int i = 0; i < retValue.length; i++)
+		{
+			retValue[i] = list.get(i);
+		}
+        return retValue;
+	}	//	getIDsEx
 }	//	DB

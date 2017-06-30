@@ -36,8 +36,8 @@ import org.adempiere.webui.component.Rows;
 import org.adempiere.webui.component.Window;
 import org.adempiere.webui.editor.WNumberEditor;
 import org.adempiere.webui.editor.WSearchEditor;
-import org.adempiere.webui.event.ValueChangeEvent;
-import org.adempiere.webui.event.ValueChangeListener;
+import org.adempiere.exceptions.ValueChangeEvent;
+import org.adempiere.exceptions.ValueChangeListener;
 import org.adempiere.webui.panel.ADForm;
 import org.adempiere.webui.panel.CustomForm;
 import org.adempiere.webui.panel.IFormController;
@@ -56,6 +56,7 @@ import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.PaymentExport;
+import org.compiere.util.PaymentExportList;
 import org.compiere.util.ValueNamePair;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -353,12 +354,19 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 				paymentExportClass = "org.compiere.util.GenericPaymentExport";
 			}
 			//	Get Payment Export Class
-			PaymentExport custom = null;
 			try
 			{
 				Class<?> clazz = Class.forName(paymentExportClass);
-				custom = (PaymentExport)clazz.newInstance();
-				no = custom.exportToFile(paySelectionChecks, tempFile, error);
+				if (clazz.isInstance(PaymentExportList.class))
+				{
+					PaymentExportList custom = (PaymentExportList)clazz.newInstance();
+					no = custom.exportToFile(paySelectionChecks, tempFile, error);
+				}
+				else if (clazz.isInstance(PaymentExport.class))
+				{
+					PaymentExport custom = (PaymentExport)clazz.newInstance();
+					no = custom.exportToFile(paySelectionChecks.toArray(new MPaySelectionCheck[paySelectionChecks.size()]), tempFile, error);
+				}
 			}
 			catch (ClassNotFoundException e)
 			{
@@ -425,15 +433,14 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 			return;
 
 		//	for all checks
-		pdfList = new ArrayList<File>();
+		pdfList = new ArrayList<>();
 		paySelectionChecks.stream().filter(paySelectionCheck -> paySelectionCheck != null).forEach(paySelectionCheck -> {
 			//	ReportCtrl will check BankAccountDoc for PrintFormat
 			ReportEngine re = ReportEngine.get(Env.getCtx(), ReportEngine.CHECK, paySelectionCheck.get_ID());
 			try 
 			{
 				File file = File.createTempFile("WPayPrint", null);
-				re.getPDF(file);
-				addPDFFile(file);
+				addPDFFile(re.getPDF(file));
 			}
 			catch (Exception e)
 			{
@@ -471,7 +478,7 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 		SimplePDFViewer remitViewer = null; 
 		if (FDialog.ask(windowNo, form, "VPayPrintPrintRemittance"))
 		{
-			pdfList = new ArrayList<File>();
+			pdfList = new ArrayList<>();
 			paySelectionChecks.stream()
 					.filter(paySelectionCheck -> paySelectionCheck != null)
 					.forEach(paySelectionCheck -> {
@@ -479,8 +486,7 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 				try 
 				{
 					File file = File.createTempFile("WPayPrint", null);
-					re.getPDF(file);
-					addPDFFile(file);
+					addPDFFile(re.getPDF(file));
 				}
 				catch (Exception e)
 				{

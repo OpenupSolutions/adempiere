@@ -26,14 +26,14 @@ import org.compiere.util.KeyNamePair;
 
 /** Generated Model for HR_Movement
  *  @author Adempiere (generated) 
- *  @version Release 3.8.0 - $Id$ */
+ *  @version Release 3.9.0 - $Id$ */
 public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent 
 {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20160824L;
+	private static final long serialVersionUID = 20170407L;
 
     /** Standard Constructor */
     public X_HR_Movement (Properties ctx, int HR_Movement_ID, String trxName)
@@ -124,32 +124,6 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	/** AccountSign AD_Reference_ID=118 */
-	public static final int ACCOUNTSIGN_AD_Reference_ID=118;
-	/** Natural = N */
-	public static final String ACCOUNTSIGN_Natural = "N";
-	/** Debit = D */
-	public static final String ACCOUNTSIGN_Debit = "D";
-	/** Credit = C */
-	public static final String ACCOUNTSIGN_Credit = "C";
-	/** Set Account Sign.
-		@param AccountSign 
-		Indicates the Natural Sign of the Account as a Debit or Credit
-	  */
-	public void setAccountSign (String AccountSign)
-	{
-
-		set_ValueNoCheck (COLUMNNAME_AccountSign, AccountSign);
-	}
-
-	/** Get Account Sign.
-		@return Indicates the Natural Sign of the Account as a Debit or Credit
-	  */
-	public String getAccountSign () 
-	{
-		return (String)get_Value(COLUMNNAME_AccountSign);
-	}
-
 	/** Set Amount.
 		@param Amount 
 		Amount in a defined currency
@@ -198,29 +172,29 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	public org.compiere.model.I_C_BP_BankAccount getC_BP_BankAccount() throws RuntimeException
+	public org.compiere.model.I_C_BPartner getC_BPartner() throws RuntimeException
     {
-		return (org.compiere.model.I_C_BP_BankAccount)MTable.get(getCtx(), org.compiere.model.I_C_BP_BankAccount.Table_Name)
-			.getPO(getC_BP_BankAccount_ID(), get_TrxName());	}
+		return (org.compiere.model.I_C_BPartner)MTable.get(getCtx(), org.compiere.model.I_C_BPartner.Table_Name)
+			.getPO(getC_BPartner_ID(), get_TrxName());	}
 
-	/** Set Partner Bank Account.
-		@param C_BP_BankAccount_ID 
-		Bank Account of the Business Partner
+	/** Set Business Partner .
+		@param C_BPartner_ID 
+		Identifies a Business Partner
 	  */
-	public void setC_BP_BankAccount_ID (int C_BP_BankAccount_ID)
+	public void setC_BPartner_ID (int C_BPartner_ID)
 	{
-		if (C_BP_BankAccount_ID < 1) 
-			set_ValueNoCheck (COLUMNNAME_C_BP_BankAccount_ID, null);
+		if (C_BPartner_ID < 1) 
+			set_Value (COLUMNNAME_C_BPartner_ID, null);
 		else 
-			set_ValueNoCheck (COLUMNNAME_C_BP_BankAccount_ID, Integer.valueOf(C_BP_BankAccount_ID));
+			set_Value (COLUMNNAME_C_BPartner_ID, Integer.valueOf(C_BPartner_ID));
 	}
 
-	/** Get Partner Bank Account.
-		@return Bank Account of the Business Partner
+	/** Get Business Partner .
+		@return Identifies a Business Partner
 	  */
-	public int getC_BP_BankAccount_ID () 
+	public int getC_BPartner_ID () 
 	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_BP_BankAccount_ID);
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_BPartner_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -254,29 +228,29 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	public org.compiere.model.I_C_BPartner getC_BPartner() throws RuntimeException
+	public org.compiere.model.I_C_BP_Relation getC_BP_Relation() throws RuntimeException
     {
-		return (org.compiere.model.I_C_BPartner)MTable.get(getCtx(), org.compiere.model.I_C_BPartner.Table_Name)
-			.getPO(getC_BPartner_ID(), get_TrxName());	}
+		return (org.compiere.model.I_C_BP_Relation)MTable.get(getCtx(), org.compiere.model.I_C_BP_Relation.Table_Name)
+			.getPO(getC_BP_Relation_ID(), get_TrxName());	}
 
-	/** Set Business Partner .
-		@param C_BPartner_ID 
-		Identifies a Business Partner
+	/** Set Partner Relation.
+		@param C_BP_Relation_ID 
+		Business Partner Relation
 	  */
-	public void setC_BPartner_ID (int C_BPartner_ID)
+	public void setC_BP_Relation_ID (int C_BP_Relation_ID)
 	{
-		if (C_BPartner_ID < 1) 
-			set_Value (COLUMNNAME_C_BPartner_ID, null);
+		if (C_BP_Relation_ID < 1) 
+			set_Value (COLUMNNAME_C_BP_Relation_ID, null);
 		else 
-			set_Value (COLUMNNAME_C_BPartner_ID, Integer.valueOf(C_BPartner_ID));
+			set_Value (COLUMNNAME_C_BP_Relation_ID, Integer.valueOf(C_BP_Relation_ID));
 	}
 
-	/** Get Business Partner .
-		@return Identifies a Business Partner
+	/** Get Partner Relation.
+		@return Business Partner Relation
 	  */
-	public int getC_BPartner_ID () 
+	public int getC_BP_Relation_ID () 
 	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_BPartner_ID);
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_BP_Relation_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -338,29 +312,29 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	public org.compiere.model.I_C_Payment getC_Payment() throws RuntimeException
+	public org.compiere.model.I_C_Project getC_Project() throws RuntimeException
     {
-		return (org.compiere.model.I_C_Payment)MTable.get(getCtx(), org.compiere.model.I_C_Payment.Table_Name)
-			.getPO(getC_Payment_ID(), get_TrxName());	}
+		return (org.compiere.model.I_C_Project)MTable.get(getCtx(), org.compiere.model.I_C_Project.Table_Name)
+			.getPO(getC_Project_ID(), get_TrxName());	}
 
-	/** Set Payment.
-		@param C_Payment_ID 
-		Payment identifier
+	/** Set Project.
+		@param C_Project_ID 
+		Financial Project
 	  */
-	public void setC_Payment_ID (int C_Payment_ID)
+	public void setC_Project_ID (int C_Project_ID)
 	{
-		if (C_Payment_ID < 1) 
-			set_Value (COLUMNNAME_C_Payment_ID, null);
+		if (C_Project_ID < 1) 
+			set_Value (COLUMNNAME_C_Project_ID, null);
 		else 
-			set_Value (COLUMNNAME_C_Payment_ID, Integer.valueOf(C_Payment_ID));
+			set_Value (COLUMNNAME_C_Project_ID, Integer.valueOf(C_Project_ID));
 	}
 
-	/** Get Payment.
-		@return Payment identifier
+	/** Get Project.
+		@return Financial Project
 	  */
-	public int getC_Payment_ID () 
+	public int getC_Project_ID () 
 	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_Payment_ID);
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_Project_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -422,34 +396,6 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	public org.compiere.model.I_C_Project getC_Project() throws RuntimeException
-    {
-		return (org.compiere.model.I_C_Project)MTable.get(getCtx(), org.compiere.model.I_C_Project.Table_Name)
-			.getPO(getC_Project_ID(), get_TrxName());	}
-
-	/** Set Project.
-		@param C_Project_ID 
-		Financial Project
-	  */
-	public void setC_Project_ID (int C_Project_ID)
-	{
-		if (C_Project_ID < 1) 
-			set_Value (COLUMNNAME_C_Project_ID, null);
-		else 
-			set_Value (COLUMNNAME_C_Project_ID, Integer.valueOf(C_Project_ID));
-	}
-
-	/** Get Project.
-		@return Financial Project
-	  */
-	public int getC_Project_ID () 
-	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_Project_ID);
-		if (ii == null)
-			 return 0;
-		return ii.intValue();
-	}
-
 	public org.compiere.model.I_C_SalesRegion getC_SalesRegion() throws RuntimeException
     {
 		return (org.compiere.model.I_C_SalesRegion)MTable.get(getCtx(), org.compiere.model.I_C_SalesRegion.Table_Name)
@@ -476,31 +422,6 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
-	}
-
-	/** ColumnType AD_Reference_ID=53243 */
-	public static final int COLUMNTYPE_AD_Reference_ID=53243;
-	/** Amount = A */
-	public static final String COLUMNTYPE_Amount = "A";
-	/** Date = D */
-	public static final String COLUMNTYPE_Date = "D";
-	/** Quantity = Q */
-	public static final String COLUMNTYPE_Quantity = "Q";
-	/** Text = T */
-	public static final String COLUMNTYPE_Text = "T";
-	/** Set Column Type.
-		@param ColumnType Column Type	  */
-	public void setColumnType (String ColumnType)
-	{
-
-		set_Value (COLUMNNAME_ColumnType, ColumnType);
-	}
-
-	/** Get Column Type.
-		@return Column Type	  */
-	public String getColumnType () 
-	{
-		return (String)get_Value(COLUMNNAME_ColumnType);
 	}
 
 	/** Set Description.
@@ -702,6 +623,31 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
+	public org.eevolution.model.I_HR_Employee getHR_Employee() throws RuntimeException
+    {
+		return (org.eevolution.model.I_HR_Employee)MTable.get(getCtx(), org.eevolution.model.I_HR_Employee.Table_Name)
+			.getPO(getHR_Employee_ID(), get_TrxName());	}
+
+	/** Set Payroll Employee.
+		@param HR_Employee_ID Payroll Employee	  */
+	public void setHR_Employee_ID (int HR_Employee_ID)
+	{
+		if (HR_Employee_ID < 1) 
+			set_Value (COLUMNNAME_HR_Employee_ID, null);
+		else 
+			set_Value (COLUMNNAME_HR_Employee_ID, Integer.valueOf(HR_Employee_ID));
+	}
+
+	/** Get Payroll Employee.
+		@return Payroll Employee	  */
+	public int getHR_Employee_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_HR_Employee_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	public org.eevolution.model.I_HR_EmployeeType getHR_EmployeeType() throws RuntimeException
     {
 		return (org.eevolution.model.I_HR_EmployeeType)MTable.get(getCtx(), org.eevolution.model.I_HR_EmployeeType.Table_Name)
@@ -730,26 +676,26 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return ii.intValue();
 	}
 
-	public org.eevolution.model.I_HR_Employee getHR_Employee() throws RuntimeException
+	public org.eevolution.model.I_HR_Job getHR_Job() throws RuntimeException
     {
-		return (org.eevolution.model.I_HR_Employee)MTable.get(getCtx(), org.eevolution.model.I_HR_Employee.Table_Name)
-			.getPO(getHR_Employee_ID(), get_TrxName());	}
+		return (org.eevolution.model.I_HR_Job)MTable.get(getCtx(), org.eevolution.model.I_HR_Job.Table_Name)
+			.getPO(getHR_Job_ID(), get_TrxName());	}
 
-	/** Set Payroll Employee.
-		@param HR_Employee_ID Payroll Employee	  */
-	public void setHR_Employee_ID (int HR_Employee_ID)
+	/** Set Payroll Job.
+		@param HR_Job_ID Payroll Job	  */
+	public void setHR_Job_ID (int HR_Job_ID)
 	{
-		if (HR_Employee_ID < 1) 
-			set_Value (COLUMNNAME_HR_Employee_ID, null);
+		if (HR_Job_ID < 1) 
+			set_Value (COLUMNNAME_HR_Job_ID, null);
 		else 
-			set_Value (COLUMNNAME_HR_Employee_ID, Integer.valueOf(HR_Employee_ID));
+			set_Value (COLUMNNAME_HR_Job_ID, Integer.valueOf(HR_Job_ID));
 	}
 
-	/** Get Payroll Employee.
-		@return Payroll Employee	  */
-	public int getHR_Employee_ID () 
+	/** Get Payroll Job.
+		@return Payroll Job	  */
+	public int getHR_Job_ID () 
 	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_HR_Employee_ID);
+		Integer ii = (Integer)get_Value(COLUMNNAME_HR_Job_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -778,31 +724,6 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 	public int getHR_JobType_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_HR_JobType_ID);
-		if (ii == null)
-			 return 0;
-		return ii.intValue();
-	}
-
-	public org.eevolution.model.I_HR_Job getHR_Job() throws RuntimeException
-    {
-		return (org.eevolution.model.I_HR_Job)MTable.get(getCtx(), org.eevolution.model.I_HR_Job.Table_Name)
-			.getPO(getHR_Job_ID(), get_TrxName());	}
-
-	/** Set Payroll Job.
-		@param HR_Job_ID Payroll Job	  */
-	public void setHR_Job_ID (int HR_Job_ID)
-	{
-		if (HR_Job_ID < 1) 
-			set_Value (COLUMNNAME_HR_Job_ID, null);
-		else 
-			set_Value (COLUMNNAME_HR_Job_ID, Integer.valueOf(HR_Job_ID));
-	}
-
-	/** Get Payroll Job.
-		@return Payroll Job	  */
-	public int getHR_Job_ID () 
-	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_HR_Job_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -993,6 +914,26 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		return false;
 	}
 
+	/** Set Period No.
+		@param PeriodNo 
+		Unique Period Number
+	  */
+	public void setPeriodNo (int PeriodNo)
+	{
+		set_Value (COLUMNNAME_PeriodNo, Integer.valueOf(PeriodNo));
+	}
+
+	/** Get Period No.
+		@return Unique Period Number
+	  */
+	public int getPeriodNo () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_PeriodNo);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	public org.eevolution.model.I_PP_Cost_Collector getPP_Cost_Collector() throws RuntimeException
     {
 		return (org.eevolution.model.I_PP_Cost_Collector)MTable.get(getCtx(), org.eevolution.model.I_PP_Cost_Collector.Table_Name)
@@ -1013,60 +954,6 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 	public int getPP_Cost_Collector_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_PP_Cost_Collector_ID);
-		if (ii == null)
-			 return 0;
-		return ii.intValue();
-	}
-
-	/** PaymentRule AD_Reference_ID=195 */
-	public static final int PAYMENTRULE_AD_Reference_ID=195;
-	/** Cash = B */
-	public static final String PAYMENTRULE_Cash = "B";
-	/** Credit Card = K */
-	public static final String PAYMENTRULE_CreditCard = "K";
-	/** Direct Deposit = T */
-	public static final String PAYMENTRULE_DirectDeposit = "T";
-	/** Check = S */
-	public static final String PAYMENTRULE_Check = "S";
-	/** On Credit = P */
-	public static final String PAYMENTRULE_OnCredit = "P";
-	/** Direct Debit = D */
-	public static final String PAYMENTRULE_DirectDebit = "D";
-	/** Mixed = M */
-	public static final String PAYMENTRULE_Mixed = "M";
-	/** Set Payment Rule.
-		@param PaymentRule 
-		How you pay the invoice
-	  */
-	public void setPaymentRule (String PaymentRule)
-	{
-
-		set_Value (COLUMNNAME_PaymentRule, PaymentRule);
-	}
-
-	/** Get Payment Rule.
-		@return How you pay the invoice
-	  */
-	public String getPaymentRule () 
-	{
-		return (String)get_Value(COLUMNNAME_PaymentRule);
-	}
-
-	/** Set Period No.
-		@param PeriodNo 
-		Unique Period Number
-	  */
-	public void setPeriodNo (int PeriodNo)
-	{
-		set_Value (COLUMNNAME_PeriodNo, Integer.valueOf(PeriodNo));
-	}
-
-	/** Get Period No.
-		@return Unique Period Number
-	  */
-	public int getPeriodNo () 
-	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_PeriodNo);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -1114,6 +1001,23 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 		if (bd == null)
 			 return Env.ZERO;
 		return bd;
+	}
+
+	/** Set Reference No.
+		@param ReferenceNo 
+		Your customer or vendor number at the Business Partner's site
+	  */
+	public void setReferenceNo (String ReferenceNo)
+	{
+		set_Value (COLUMNNAME_ReferenceNo, ReferenceNo);
+	}
+
+	/** Get Reference No.
+		@return Your customer or vendor number at the Business Partner's site
+	  */
+	public String getReferenceNo () 
+	{
+		return (String)get_Value(COLUMNNAME_ReferenceNo);
 	}
 
 	/** Set Sequence.
@@ -1221,6 +1125,62 @@ public class X_HR_Movement extends PO implements I_HR_Movement, I_Persistent
 	public int getUser2_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_User2_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ElementValue getUser3() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ElementValue)MTable.get(getCtx(), org.compiere.model.I_C_ElementValue.Table_Name)
+			.getPO(getUser3_ID(), get_TrxName());	}
+
+	/** Set User List 3.
+		@param User3_ID 
+		User defined list element #3
+	  */
+	public void setUser3_ID (int User3_ID)
+	{
+		if (User3_ID < 1) 
+			set_Value (COLUMNNAME_User3_ID, null);
+		else 
+			set_Value (COLUMNNAME_User3_ID, Integer.valueOf(User3_ID));
+	}
+
+	/** Get User List 3.
+		@return User defined list element #3
+	  */
+	public int getUser3_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_User3_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ElementValue getUser4() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ElementValue)MTable.get(getCtx(), org.compiere.model.I_C_ElementValue.Table_Name)
+			.getPO(getUser4_ID(), get_TrxName());	}
+
+	/** Set User List 4.
+		@param User4_ID 
+		User defined list element #4
+	  */
+	public void setUser4_ID (int User4_ID)
+	{
+		if (User4_ID < 1) 
+			set_Value (COLUMNNAME_User4_ID, null);
+		else 
+			set_Value (COLUMNNAME_User4_ID, Integer.valueOf(User4_ID));
+	}
+
+	/** Get User List 4.
+		@return User defined list element #4
+	  */
+	public int getUser4_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_User4_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();

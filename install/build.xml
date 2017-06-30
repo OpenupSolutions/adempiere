@@ -106,7 +106,7 @@
 		<attribute name="Implementation-Title" value="CInstall ${env.ADEMPIERE_VERSION}"/>
 		<attribute name="Implementation-Version" value="${env.ADEMPIERE_VERSION} ${DSTAMP}-${TSTAMP}"/>
 		<attribute name="Implementation-Vendor" value="${env.ADEMPIERE_VENDOR}"/>
-		<attribute name="Implementation-URL" value="http://www.adempiere.org"/>
+		<attribute name="Implementation-URL" value="http://www.adempiere.net"/>
 		<attribute name="Main-Class" value="org.compiere.install.Setup"/>
 		<attribute name="Class-Path" value="CTools.jar CClient.jar oracle.jar"/>
 	  </manifest>
@@ -130,7 +130,7 @@
 	<fixcrlf srcdir="${utils.dir}/unix"
 		eol="lf" eof="remove"
 		includes="*"/>
-	<fixcrlf srcdir="../sqlj/oracle"
+	<fixcrlf srcdir="../sqlj/Oracle"
 		eol="lf" eof="remove"
 		includes="*.sh"/>
   </target>
@@ -176,9 +176,26 @@
 
 	<mkdir dir="${build.dir}/Adempiere/zkpackages/liberoHR"/>
 	<mkdir dir="${build.dir}/Adempiere/zkpackages/liberoHR/lib"/>
-	<copy file="../zkpackages/liberozkHR.jar" tofile="${build.dir}/Adempiere/zkpackages/liberozkHR/lib/liberozkHR.jar"/>
+	<copy file="../zkpackages/liberozkHR.jar" tofile="${build.dir}/Adempiere/zkpackages/liberoHR/lib/liberozkHR.jar"/>
 
-  	<copy file="../lib/CheckConflicts.sh" tofile="${build.dir}/Adempiere/lib/CheckConflicts.sh"/>
+	<mkdir dir="${build.dir}/Adempiere/packages/ADempierePOS"/>
+	<mkdir dir="${build.dir}/Adempiere/packages/ADempierePOS/lib"/>
+	<copy file="../packages/ADempierePOS.jar" tofile="${build.dir}/Adempiere/packages/ADempierePOS/lib/ADempierePOS.jar"/>
+
+	<mkdir dir="${build.dir}/Adempiere/zkpackages/ADempierePOS"/>
+	<mkdir dir="${build.dir}/Adempiere/zkpackages/ADempierePOS/lib"/>
+	<copy file="../zkpackages/ADempierePOSzk.jar" tofile="${build.dir}/Adempiere/zkpackages/ADempierePOS/lib/ADempierePOSzk.jar"/>
+
+    <mkdir dir="${build.dir}/Adempiere/packages/liberoFreight"/>
+    <mkdir dir="${build.dir}/Adempiere/packages/liberoFreight/lib"/>
+    <copy file="../packages/liberoFreight.jar" tofile="${build.dir}/Adempiere/packages/liberoFreight/lib/liberoFreight.jar"/>
+
+    <mkdir dir="${build.dir}/Adempiere/zkpackages/liberoFreight"/>
+    <mkdir dir="${build.dir}/Adempiere/zkpackages/liberoFreight/lib"/>
+    <copy file="../zkpackages/liberozkFreight.jar" tofile="${build.dir}/Adempiere/zkpackages/liberoFreight/lib/liberozkFreight.jar"/>
+
+
+	  <copy file="../lib/CheckConflicts.sh" tofile="${build.dir}/Adempiere/lib/CheckConflicts.sh"/>
 
 	<!-- Base Directory			-->
 	<copy todir="${build.dir}/Adempiere">
@@ -214,16 +231,16 @@
 	<copy todir="${build.dir}/Adempiere/utils">
 	  <fileset dir="${utils.dir}" excludes="**/pg/**,.project"/>
 	</copy>
-	<copy todir="${build.dir}/Adempiere/utils/oracle">
-	  <fileset dir="${dbStartup.dir}/oracle" includes="*.sql"/>
-	  <fileset dir="../sqlj/oracle/"/>
+	<copy todir="${build.dir}/Adempiere/utils/Oracle">
+	  <fileset dir="${dbStartup.dir}/Oracle" includes="*.sql"/>
+	  <fileset dir="../sqlj/Oracle/"/>
 	</copy>
 	<copy todir="${build.dir}/Adempiere/utils/PostgreSQL">
 	  <fileset dir="${dbStartup.dir}/PostgreSQL" includes="*.sql"/>
-	  <fileset dir="../sqlj/postgresql/"/>
+	  <fileset dir="../sqlj/PostgreSQL/"/>
 	</copy>
-	<copy todir="${build.dir}/Adempiere/utils/oracleXE">
-	  <fileset dir="${dbStartup.dir}/oracleXE" includes="*.sql"/>
+	<copy todir="${build.dir}/Adempiere/utils/OracleXE">
+	  <fileset dir="${dbStartup.dir}/OracleXE" includes="*.sql"/>
 	</copy>
 
 
@@ -275,6 +292,12 @@
   	<copy todir="${build.dir}/Adempiere/glassfish">
   		<fileset dir="../glassfishfacet/config"/>
   	</copy>
+
+    <!-- tomcat -->
+    <mkdir dir="${build.dir}/Adempiere/tomcat"/>
+    <copy todir="${build.dir}/Adempiere/tomcat">
+	  <fileset dir="../tomcat"/>
+    </copy>
 
   <chmod perm="755">
       <fileset dir="${build.dir}/Adempiere/">

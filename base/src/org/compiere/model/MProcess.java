@@ -39,8 +39,11 @@ import org.compiere.wf.MWFNode;
  * 			<li>BF [ 1757523 ] Server Processes are using Server's context
  * 			<li>FR [ 2214883 ] Remove SQL code and Replace for Query
  * @contributor Yamel Senih, ysenih@erpcya.com, ERPCyA http://www.erpcya.com
- *  	<a href="https://github.com/adempiere/adempiere/issues/566">
- * 		@see FR [ 566 ] Process parameter don't have a parameter like only information</a>
+ *    <a href="https://github.com/adempiere/adempiere/issues/566">
+ *    @see FR [ 566 ] Process parameter don't have a parameter like only information</a>
+ *  @contributor Raul Munoz, rmunoz@erpcya.com, ERPCyA http://www.erpcya.com
+ *   <li> FR [ 566 ] Add validation parameter get Only Active Records
+ *    
  */
 public class MProcess extends X_AD_Process
 {
@@ -82,6 +85,21 @@ public class MProcess extends X_AD_Process
 			s_cache.put (key, retValue);
 		return retValue;
 	}	//	get
+	
+	/**
+	 * Get Process From Instance
+	 * @param ctx
+	 * @param processInstanceId
+	 * @return
+	 */
+	public static MProcess getFromInstance(Properties ctx, int processInstanceId) {
+		return new Query(Env.getCtx() , Table_Name , 
+				"EXISTS(SELECT 1 FROM AD_PInstance pi "
+				+ "WHERE pi.AD_Process_ID = AD_Process.AD_Process_ID "
+				+ "AND pi.AD_PInstance_ID = ?)", null)
+			.setParameters(processInstanceId)
+			.first();
+	}
 	
 	/**
 	 * 	Get MProcess from Menu
@@ -230,6 +248,7 @@ public class MProcess extends X_AD_Process
 		//	
 		List<MProcessPara> list = new Query(getCtx(), I_AD_Process_Para.Table_Name, whereClause.toString(), get_TrxName())
 			.setParameters(get_ID())
+			.setOnlyActiveRecords(true)
 			.setOrderBy(MProcessPara.COLUMNNAME_SeqNo)
 			.list();
 		//
@@ -381,6 +400,14 @@ public class MProcess extends X_AD_Process
 		String Classname = getClassname();
 		return (Classname != null && Classname.length() > 0);
 	}	//	is JavaProcess
+	
+	/**
+	 * Is a Jasper Process
+	 * @return
+	 */
+	public boolean isJasper() {
+		return getJasperReport() != null && getJasperReport().trim().length() > 0;
+	}
 	
 	/**
 	 *  Start Database Process
@@ -558,5 +585,16 @@ public class MProcess extends X_AD_Process
 	{
 		return processIt(pi, trx, false);
 	}	//	processItWithoutTrxClose
+	
+	/**
+	 * Get Estimated Seconds
+	 * @return
+	 */
+	public int getEstimatedSeconds() {
+		if(getStatistic_Count() == 0)
+			return 0;
+		//	Else
+		return getStatistic_Seconds() / getStatistic_Count();
+	}
 	
 }	//	MProcess

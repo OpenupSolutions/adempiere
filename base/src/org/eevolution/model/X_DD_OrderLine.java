@@ -26,14 +26,14 @@ import org.compiere.util.KeyNamePair;
 
 /** Generated Model for DD_OrderLine
  *  @author Adempiere (generated) 
- *  @version Release 3.8.0 - $Id$ */
+ *  @version Release 3.9.0 - $Id$ */
 public class X_DD_OrderLine extends PO implements I_DD_OrderLine, I_Persistent 
 {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20160823L;
+	private static final long serialVersionUID = 20161226L;
 
     /** Standard Constructor */
     public X_DD_OrderLine (Properties ctx, int DD_OrderLine_ID, String trxName)
@@ -191,6 +191,62 @@ public class X_DD_OrderLine extends PO implements I_DD_OrderLine, I_Persistent
 	public int getC_Charge_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_C_Charge_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ProjectPhase getC_ProjectPhase() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ProjectPhase)MTable.get(getCtx(), org.compiere.model.I_C_ProjectPhase.Table_Name)
+			.getPO(getC_ProjectPhase_ID(), get_TrxName());	}
+
+	/** Set Project Phase.
+		@param C_ProjectPhase_ID 
+		Phase of a Project
+	  */
+	public void setC_ProjectPhase_ID (int C_ProjectPhase_ID)
+	{
+		if (C_ProjectPhase_ID < 1) 
+			set_Value (COLUMNNAME_C_ProjectPhase_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_ProjectPhase_ID, Integer.valueOf(C_ProjectPhase_ID));
+	}
+
+	/** Get Project Phase.
+		@return Phase of a Project
+	  */
+	public int getC_ProjectPhase_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_ProjectPhase_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ProjectTask getC_ProjectTask() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ProjectTask)MTable.get(getCtx(), org.compiere.model.I_C_ProjectTask.Table_Name)
+			.getPO(getC_ProjectTask_ID(), get_TrxName());	}
+
+	/** Set Project Task.
+		@param C_ProjectTask_ID 
+		Actual Project Task in a Phase
+	  */
+	public void setC_ProjectTask_ID (int C_ProjectTask_ID)
+	{
+		if (C_ProjectTask_ID < 1) 
+			set_Value (COLUMNNAME_C_ProjectTask_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_ProjectTask_ID, Integer.valueOf(C_ProjectTask_ID));
+	}
+
+	/** Get Project Task.
+		@return Actual Project Task in a Phase
+	  */
+	public int getC_ProjectTask_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_ProjectTask_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -926,6 +982,62 @@ public class X_DD_OrderLine extends PO implements I_DD_OrderLine, I_Persistent
 	public int getUser2_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_User2_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ElementValue getUser3() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ElementValue)MTable.get(getCtx(), org.compiere.model.I_C_ElementValue.Table_Name)
+			.getPO(getUser3_ID(), get_TrxName());	}
+
+	/** Set User List 3.
+		@param User3_ID 
+		User defined list element #3
+	  */
+	public void setUser3_ID (int User3_ID)
+	{
+		if (User3_ID < 1) 
+			set_Value (COLUMNNAME_User3_ID, null);
+		else 
+			set_Value (COLUMNNAME_User3_ID, Integer.valueOf(User3_ID));
+	}
+
+	/** Get User List 3.
+		@return User defined list element #3
+	  */
+	public int getUser3_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_User3_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_ElementValue getUser4() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_ElementValue)MTable.get(getCtx(), org.compiere.model.I_C_ElementValue.Table_Name)
+			.getPO(getUser4_ID(), get_TrxName());	}
+
+	/** Set User List 4.
+		@param User4_ID 
+		User defined list element #4
+	  */
+	public void setUser4_ID (int User4_ID)
+	{
+		if (User4_ID < 1) 
+			set_Value (COLUMNNAME_User4_ID, null);
+		else 
+			set_Value (COLUMNNAME_User4_ID, Integer.valueOf(User4_ID));
+	}
+
+	/** Get User List 4.
+		@return User defined list element #4
+	  */
+	public int getUser4_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_User4_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();

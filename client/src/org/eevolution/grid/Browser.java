@@ -898,8 +898,10 @@ public abstract class Browser {
 	public void setProcessInfo(ProcessInfo pi) {
 		m_pi = pi;
 		if(m_pi != null)
-			if(	browsePI !=null)
+			if(	browsePI !=null) {
 				browsePI.setRecord_ID(m_pi.getRecord_ID());
+				browsePI.setTable_ID(m_pi.getTable_ID());
+			}
 	}
 
 	/**
@@ -1161,6 +1163,8 @@ public abstract class Browser {
 				browseField.setAD_Reference_Value_ID(ycol.getAD_Column().getAD_Reference_Value_ID());
 				browseField.setIsKey(false);
 				browseField.setIsDisplayed(true);
+				browseField.setAxis_Column_ID(field.getAxis_Column_ID());
+				browseField.setAxis_Parent_Column_ID(field.getAxis_Parent_Column_ID());
 				browseField.setIsReadOnly(field.isReadOnly());
 				browseField.setAD_Element_ID(field.getAD_Element_ID());
 
@@ -1353,7 +1357,8 @@ public abstract class Browser {
 	
 	/*public String getSQLOrderBy() {
 		StringBuilder sqlOrderBy = new StringBuilder();
-		for (MBrowseField field : m_Browse.getOrderByFields()) {
+		for (MBrowseField fi
+		eld : m_Browse.getOrderByFields()) {
 			if (sqlOrderBy.length() > 0 && field.isOrderBy())
 				sqlOrderBy.append(",");
 

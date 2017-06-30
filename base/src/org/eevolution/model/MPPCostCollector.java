@@ -175,6 +175,8 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 		cc.setProcessing(false);
 		cc.setUser1_ID(order.getUser1_ID());
 		cc.setUser2_ID(order.getUser2_ID());
+		cc.setUser3_ID(order.getUser3_ID());
+		cc.setUser4_ID(order.getUser4_ID());
 		cc.setM_Product_ID(productId);
 		if(orderNodeId > 0)
 		{	
@@ -398,19 +400,22 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 		else if (isIssue())
 		{
 			MProduct product = getM_Product();
-			if (getM_AttributeSetInstance_ID() == 0 && product.isASIMandatory(false, getAD_Org_ID()))
+			//Validate if ASI is mandatory
+			MAttributeSet.validateAttributeSetInstanceMandatory(product, Table_ID , false , getM_AttributeSetInstanceTo_ID());
+			/*if (getM_AttributeSetInstance_ID() == 0 && product.isASIMandatory(false, getAD_Org_ID()))
 			{
 				throw new AdempiereException("@M_AttributeSet_ID@ @IsMandatory@ @M_Product_ID@=" + product.getValue());
-			}
+			}*/
 		}
 		// Receipt
 		else if (isReceipt())
 		{
 			MProduct product = getM_Product();
-			if (getM_AttributeSetInstance_ID() == 0 && product.isASIMandatory(true,getAD_Org_ID()))
+			MAttributeSet.validateAttributeSetInstanceMandatory(product, Table_ID , false , getM_AttributeSetInstanceTo_ID());
+			/*if (getM_AttributeSetInstance_ID() == 0 && product.isASIMandatory(true,getAD_Org_ID()))
 			{
 				throw new AdempiereException("@M_AttributeSet_ID@ @IsMandatory@ @M_Product_ID@=" + product.getValue());
-			}
+			}**/
 		}
 		
 		m_justPrepared = true;
@@ -666,12 +671,6 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 	public int getDoc_User_ID()
 	{
 		return getCreatedBy();
-	}
-
-//	@Override
-	public int getC_Currency_ID()
-	{
-		return 0;
 	}
 
 //	@Override
@@ -1072,6 +1071,24 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 	public IDocumentLine getReversalDocumentLine() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public BigDecimal getPriceActualCurrency() {
+		return BigDecimal.ZERO;
+	}
+
+	@Override
+	public int getC_Currency_ID ()
+	{
+		MClient client  = MClient.get(getCtx());
+		return client.getC_Currency_ID();
+	}
+
+	@Override
+	public int getC_ConversionType_ID()
+	{
+		return  MConversionType.getDefault(getAD_Client_ID());
 	}
 
 }	//	MPPCostCollector

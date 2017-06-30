@@ -36,6 +36,7 @@
 	<classpathentry kind="src" path="org.adempiere.pos/src/main/java/ui/swing"/>
 	<classpathentry kind="src" path="org.adempiere.pos/src/main/java/ui/zk"/>
 	<classpathentry kind="src" path="org.eevolution.freight/src/main/java/base"/>
+	<classpathentry kind="src" path="org.compiere.mobile/WEB-INF/src/org/compiere"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="tools/lib/jstl.jar">
 		<attributes>
@@ -173,7 +174,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="tools/lib/bsh-2.0b5.jar">
+	<classpathentry exported="true" kind="lib" path="tools/lib/bsh-2.0b6.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -307,7 +308,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="tools/lib/groovy-all-2.0.1.jar">
+	<classpathentry exported="true" kind="lib" path="tools/lib/groovy-all-2.4.7.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -346,5 +347,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SBT: javax.servlet:javax.servlet-api:3.0.1:jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SBT: org.scalatest:scalatest_2.11:2.2.4:jar"/>
 	<classpathentry kind="lib" path="tools/lib/mariadb-java-client.jar"/>
+	<classpathentry kind="lib" path="tools/lib/slf4j-api-1.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

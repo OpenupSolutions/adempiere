@@ -108,7 +108,7 @@ public class   Doc_HRProcess extends Doc
 	{
 		Fact fact = new Fact(this, as, Fact.POST_Actual);		
 		final String sql= "SELECT m.HR_Concept_id, MAX(c.Name) As Name, SUM(m.Amount) As Amount, MAX(c.AccountSign) As AccountSign, " + // 1,2,3,4
-		" MAX(CA.IsBalancing) As IsBalancing, e.AD_Org_ID As AD_Org_ID, m.C_Activity_ID, bp.C_BPartner_ID" // 5,6,7
+		" MAX(CA.IsBalancing) As IsBalancing, e.AD_Org_ID As AD_Org_ID, m.C_Activity_ID, bp.C_BPartner_ID, m.User1_ID, m.User2_ID, m.User3_ID, m.User4_ID " // 5,6,7
 		+ " FROM HR_Movement m"
 		+ " INNER JOIN HR_Concept_Acct ca ON (ca.HR_Concept_ID=m.HR_Concept_ID AND ca.AD_Client_ID = m.AD_Client_ID AND ca.IsActive = 'Y')"
 		+ " INNER JOIN HR_Concept      c  ON (c.HR_Concept_ID=m.HR_Concept_ID AND c.IsActive = 'Y')"
@@ -116,8 +116,8 @@ public class   Doc_HRProcess extends Doc
 		+ " INNER JOIN HR_Employee	 e  ON (bp.C_BPartner_ID=e.C_BPartner_ID)"
 		+ " INNER JOIN HR_Department   d  ON (d.HR_Department_ID=e.HR_Department_ID)"
 		+ " WHERE m.HR_Process_ID=? AND (m.Qty <> 0 OR m.Amount <> 0) AND c.AccountSign != 'N'"
-		+ " GROUP BY m.HR_Concept_ID,e.AD_Org_ID,m.C_Activity_ID , bp.C_BPartner_ID"
-		+ " ORDER BY e.AD_Org_ID,m.C_Activity_ID,bp.C_BPartner_ID";
+		+ " GROUP BY m.HR_Concept_ID,e.AD_Org_ID,m.C_Activity_ID , bp.C_BPartner_ID , m.User1_ID, m.User2_ID, m.User3_ID, m.User4_ID  "
+		+ " ORDER BY e.AD_Org_ID,m.C_Activity_ID,bp.C_BPartner_ID, m.User1_ID, m.User2_ID, m.User3_ID, m.User4_ID ";
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		try
@@ -138,15 +138,20 @@ public class   Doc_HRProcess extends Doc
 				int AD_OrgTrx_ID=rs.getInt("AD_Org_ID");
 				int C_Activity_ID=rs.getInt("C_Activity_ID");
 				int C_BPartner_ID=rs.getInt("C_BPartner_ID");
+				int user1Id = rs.getInt("User1_ID");
+				int user2Id = rs.getInt("User3_ID");
+				int user3Id = rs.getInt("User4_ID");
+				int user4Id = rs.getInt("User5_ID");
 				MHRMovement movement =  new MHRMovement(getCtx() , 0 , getTrxName());
 				movement.setC_BPartner_ID(C_BPartner_ID);
 				movement.setHR_Concept_ID(HR_Concept_ID);
-				movement.setAccountSign(AccountSign);
 				movement.setAD_OrgTrx_ID(AD_OrgTrx_ID);
 				movement.setC_Activity_ID(C_Activity_ID);
 				movement.setAmount(sumAmount);
-				//movement.setUser1_ID();
-				//movement.setUser2_ID();
+				movement.setUser1_ID(user1Id);
+				movement.setUser2_ID(user2Id);
+				movement.setUser3_ID(user3Id);
+				movement.setUser4_ID(user4Id);
 				DocLine_Payroll docLine = new DocLine_Payroll(movement, this);
 				//
 				if (AccountSign != null && AccountSign.length() > 0 

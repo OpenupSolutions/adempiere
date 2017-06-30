@@ -28,6 +28,9 @@ import java.util.HashMap;
 /**
  * Command Manager create the command for action process
  * eEvolution author Victor Perez <victor.perez@e-evolution.com>, Created by e-Evolution on 23/01/16.
+ * @contributor Yamel Senih, ysenih@erpcya.com, ERPCyA http://www.erpcya.com
+ * 		<a href="https://github.com/adempiere/adempiere/issues/670">
+ * 		@see FR [ 670 ] Standard process for return material on POS</a>
  */
 public class CommandManager {
 
@@ -55,12 +58,13 @@ public class CommandManager {
             put(GENERATE_RETURN, commandReceiver);
 
             commandReceiver = new CommandReceiver(null, COMPLETE_DOCUMENT, "@smenu.complete.prepared.order@");
-            commands.put(COMPLETE_DOCUMENT , new CommandCompleteReturnMaterial(COMPLETE_DOCUMENT,commandReceiver.getEvent()));
-            put(COMPLETE_DOCUMENT, commandReceiver);
+            commands.put(COMPLETE_DOCUMENT, new CommandCompleteDocument(COMPLETE_DOCUMENT, commandReceiver.getEvent()));
+            put(GENERATE_RETURN, commandReceiver);
 
             commandReceiver = new CommandReceiver(null, GENERATE_WITHDRAWAL, GenerateWithdrawal.getProcessName());
             commands.put(GENERATE_WITHDRAWAL, new CommandWithdrawal(GENERATE_WITHDRAWAL,commandReceiver.getEvent()));
             put(GENERATE_WITHDRAWAL, commandReceiver);
+
 
             commandReceiver = new CommandReceiver(null, CLOSE_STATEMENT, CloseStatementPOS.getProcessName());
             commands.put(CLOSE_STATEMENT, new CommandWithdrawal(CLOSE_STATEMENT,commandReceiver.getEvent()));
