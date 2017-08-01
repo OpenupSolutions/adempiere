@@ -106,7 +106,7 @@ public final class AMenu extends CFrame
 	public AMenu ()
 	{
 		super();
-		log.info("CodeBase=" + Adempiere.getCodeBase());		
+		log.info("CodeBase=" + Adempiere.getCodeBase());
 		Splash splash = Splash.getSplash();
 		//
 		m_WindowNo = Env.createWindowNo(this);

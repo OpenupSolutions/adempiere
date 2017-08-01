@@ -246,7 +246,7 @@ public class CDialog extends JDialog
 		if (title != null)
 		{
 			int pos = title.indexOf('&');
-			if (pos != -1 && title.length() > pos)	//	We have a nemonic
+			if (pos != -1 && title.length() > pos)	//	We have a mnemonic
 			{
 				int mnemonic = title.toUpperCase().charAt(pos+1);
 				if (mnemonic != ' ')
@@ -309,5 +309,5 @@ public class CDialog extends JDialog
 				System.out.println("Action: " + e);
 		}	//	actionPerformed
 	}	//	DialogAction
-	
+
 }	//	CDialog
