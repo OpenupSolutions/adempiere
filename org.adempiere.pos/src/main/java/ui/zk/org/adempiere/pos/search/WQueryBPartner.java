@@ -15,6 +15,7 @@ package org.adempiere.pos.search;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 
 import org.adempiere.pos.WPOS;
 import org.adempiere.pos.WPOSKeyboard;
@@ -511,10 +512,19 @@ public class WQueryBPartner extends WPOSQuery {
 	@Override
 	public void refresh() {
 		lockUI();
-		setResults(MBPartnerInfo.find (ctx,
-				fieldValue.getText(), fieldTaxID.getText(),
-				fieldName.getText(), fieldName2.getText() ,
-				null, fieldEmail.getText(), fieldPhone.getText(), fieldCity.getText()));
+
+		// Openup Solutions - Redmine #11864 - 2019/04/09 - Se limita la cantidad de resultados en popup de SDN de POS
+		MBPartnerInfo[] mbPartnerInfos = MBPartnerInfo.find (ctx,
+			fieldValue.getText(), fieldTaxID.getText(),
+			fieldName.getText(), fieldName2.getText() ,
+			null, fieldEmail.getText(), fieldPhone.getText(), fieldCity.getText());
+
+		if (mbPartnerInfos != null && mbPartnerInfos.length > 50) {
+			mbPartnerInfos = Arrays.copyOf(mbPartnerInfos, 50);
+		}
+		// Openup Solutions - Redmine #11864 - Fin
+
+		setResults(mbPartnerInfos);
 		unlockUI();
 	}
 

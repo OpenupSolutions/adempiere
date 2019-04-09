@@ -17,43 +17,35 @@
 
 package org.adempiere.pos;
 
-import java.awt.Event;
-import java.awt.event.KeyEvent;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Properties;
-
-import javax.swing.KeyStroke;
-
 import org.adempiere.pos.service.CollectDetail;
 import org.adempiere.pos.service.POSPanelInterface;
 import org.adempiere.webui.apps.AEnv;
 import org.adempiere.webui.component.Button;
 import org.adempiere.webui.component.Datebox;
 import org.adempiere.webui.component.Grid;
-import org.adempiere.webui.component.GridFactory;
 import org.adempiere.webui.component.Label;
 import org.adempiere.webui.component.Listbox;
-import org.adempiere.webui.component.ListboxFactory;
 import org.adempiere.webui.component.Row;
 import org.adempiere.webui.component.Rows;
+import org.adempiere.webui.component.*;
 import org.adempiere.webui.window.FDialog;
 import org.compiere.model.MLookup;
 import org.compiere.model.MLookupFactory;
+import org.compiere.model.MLookupInfo;
 import org.compiere.model.X_C_Payment;
-import org.compiere.util.DisplayType;
-import org.compiere.util.Env;
-import org.compiere.util.KeyNamePair;
-import org.compiere.util.Msg;
-import org.compiere.util.ValueNamePair;
+import org.compiere.util.*;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zul.Caption;
-import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Panel;
-import org.zkoss.zul.Panelchildren;
-import org.zkoss.zul.Style;
+import org.zkoss.zul.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * @author Mario Calderon, mario.calderon@westfalia-it.com, Systemhaus Westfalia, http://www.westfalia-it.com
@@ -70,7 +62,7 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 	 * @param m_PayAmt
 	 */
 	public WCollectDetail(WCollect p_WCollect, String p_TenderType, BigDecimal m_PayAmt) {
-		super(p_TenderType, m_PayAmt);
+		super(p_WCollect, p_TenderType, m_PayAmt);
 		m_TenderType = p_TenderType;
 		p_ctx = Env.getCtx();
 		//	Instance POS
@@ -87,6 +79,7 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 	private Grid 			v_DebitPanel;
 	private Properties 		p_ctx;
 	private Listbox 		fTenderType;
+	private Listbox 		currency;
 	public POSNumberBox 	fPayAmt;
 	
 	/**	Check				*/
@@ -95,12 +88,12 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 	private WPOSTextField 	fCheckNo;
 	
 	/**	Credit Card			*/
-	private WPOSTextField 	fCCardNo;
-	private WPOSTextField 	fCCardName;
+//	private WPOSTextField 	fCCardNo;
+//	private WPOSTextField 	fCCardName;
 	private Listbox 		fCCardType;
-	private Listbox 		fCreditCardExpMM;
-	private Listbox 		fCreditCardExpYY;
-	private WPOSTextField 	fCCardVC;
+//	private Listbox 		fCreditCardExpMM;
+//	private Listbox 		fCreditCardExpYY;
+//	private WPOSTextField 	fCCardVC;
 	
 	/**	Credit Note			*/
 	private Grid			v_CreditMemoPanel;
@@ -120,7 +113,7 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 	/**	Default Font		*/
 	private final String 	FONT_SIZE = "Font-size:medium;";
 	/**	Default Width		*/
-	private final String 	HEIGHT = "height:33px;";
+	private final String 	HEIGHT = "height:40px;";
 	/**	Default Height		*/
 	private final String 	WIDTH = "width:149px;";
 	
@@ -137,7 +130,7 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 	public void loadStandardPanel(){
 		v_StandarPanel = GridFactory.newGridLayout();
 		v_StandarPanel.setWidth("100%");
-		v_StandarPanel.setHeight("75px");
+		v_StandarPanel.setHeight("100px");
 		groupPanel.appendChild(v_StandarPanel);
 
 		Rows rows = null;
@@ -146,8 +139,8 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 		row = rows.newRow();
 		
 		// Payment type selection
-		int AD_Column_ID = 8416; //C_Payment_v.TenderType
-		MLookup lookup = MLookupFactory.get(Env.getCtx(), 0, 0, AD_Column_ID, DisplayType.List);
+		int columnId = 8416; //C_Payment_v.TenderType
+		MLookup lookup = MLookupFactory.get(Env.getCtx(), 0, 0, columnId, DisplayType.List);
 		ArrayList<Object> types = lookup.getData(true, false, true, true);
 		
 		bMinus = v_Parent.createButtonAction("Minus", KeyStroke.getKeyStroke(KeyEvent.VK_F3, Event.F3));
@@ -171,9 +164,46 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 		}
 
 		fTenderType.setStyle(HEIGHT+WIDTH+FONT_SIZE);
-		
 		row.appendChild(fTenderType);
-		
+		//	Currency
+		columnId = 5299;
+		int conversionTypeId = v_Parent.getM_POS().get_ValueAsInt("C_ConversionType_ID");
+		if(conversionTypeId > 0) {
+			int fromCurrencyId = v_Parent.getOrder().getC_Currency_ID();
+			MLookupInfo info = MLookupFactory.getLookupInfo(Env.getCtx(), 0, columnId, DisplayType.TableDir);
+			info.ValidationCode = "EXISTS(SELECT 1 FROM C_Conversion_Rate cr "
+					+ "WHERE cr.C_Currency_ID_To = C_Currency.C_Currency_ID "
+					+ "AND cr.C_Currency_ID = " + fromCurrencyId + " "
+					+ "AND cr.C_ConversionType_ID = " + conversionTypeId + ") "
+					+ "OR C_Currency_ID = " + v_Parent.getOrder().getC_Currency_ID();
+			info.IsValidated = false;
+			MLookup currencyLookup = new MLookup(info, 0);
+			ArrayList<Object> currencyList = currencyLookup.getData(true, true, true, true);
+			
+			row = rows.newRow();
+			currency = ListboxFactory.newDropdownListbox();
+			currency.setStyle(HEIGHT+WIDTH+FONT_SIZE);
+			currency.setValue(fromCurrencyId);
+			currency.addActionListener(this);
+			
+			/**
+			 *	Load Credit Cards
+			 */
+			int index = 0;
+			for (int i = 0; i < currencyList.size(); i++) {
+				Object obj = currencyList.get(i)	;
+				if (obj instanceof KeyNamePair)	{
+					KeyNamePair key = (KeyNamePair) obj;
+					currency.appendItem(key.getName(), key.getKey());
+					if(key.getKey() == fromCurrencyId) {
+						index = i;
+					}
+				}
+			}
+			currency.setSelectedIndex(index);
+			row.appendChild(currency);
+		}
+		//	
 		Label lPayAmt  = new Label(Msg.translate(p_ctx, "PayAmt"));
 		lPayAmt.setWidth("225px");
 		fPayAmt = new POSNumberBox(false);
@@ -198,7 +228,7 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 		v_CheckPanel.setHeight("95px");
 		groupPanel.appendChild(v_CheckPanel);
 		
-		Rows rows =v_CheckPanel.newRows();
+		Rows rows = v_CheckPanel.newRows();
 		Row row = rows.newRow();
 
 		fCheckRouteNo = new WPOSTextField(Msg.translate(p_ctx, "RoutingNo"), keyboard);
@@ -257,49 +287,48 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 		}
 		
 		row.setSpans("1,2");
-		fCCardNo = new WPOSTextField(Msg.translate(p_ctx, "CreditCardNumber"), keyboard);
-		fCCardNo.setStyle(HEIGHT+WIDTH+FONT_SIZE);
-		row.appendChild(fCCardNo);
-		fCCardNo.addEventListener("onFocus", this);
+//		fCCardNo = new WPOSTextField(Msg.translate(p_ctx, "CreditCardNumber"), keyboard);
+//		fCCardNo.setStyle(HEIGHT+WIDTH+FONT_SIZE);
+//		row.appendChild(fCCardNo);
+//		fCCardNo.addEventListener("onFocus", this);
 		
-		fCCardName = new WPOSTextField(Msg.translate(p_ctx, "Name"), keyboard);
-		row = rows.newRow();
-		row.appendChild(fCCardName);
-		fCCardName.setStyle(HEIGHT+WIDTH+FONT_SIZE);
-		fCCardName.addEventListener("onFocus", this);
+//		fCCardName = new WPOSTextField(Msg.translate(p_ctx, "Name"), keyboard);
+//		row = rows.newRow();
+//		row.appendChild(fCCardName);
+//		fCCardName.setStyle(HEIGHT+WIDTH+FONT_SIZE);
+//		fCCardName.addEventListener("onFocus", this);
 		
 		//	For Card Month
-		fCreditCardExpMM = ListboxFactory.newDropdownListbox();
-		ValueNamePair[] data = getCCMonths();
-		for(ValueNamePair pp : data) {
-			fCreditCardExpMM.appendItem(String.valueOf(pp.getName()),pp.getID());
-			fCreditCardExpMM.setName(String.valueOf(pp.getID()));
-		}
-		fCreditCardExpMM.setName("CreditCardExpMM");
-		fCreditCardExpMM.addActionListener(this);
-		fCreditCardExpMM.setStyle(HEIGHT+"width:"+75+"px;"+FONT_SIZE);
-		
-		//	For Card Year
-		fCreditCardExpYY = ListboxFactory.newDropdownListbox();
-		data = getCCYears();
-		for(ValueNamePair pp : data) {
-			fCreditCardExpYY.appendItem(String.valueOf(pp.getName()),pp.getID());
-			fCreditCardExpYY.setName(String.valueOf(pp.getID()));
-		}
-		fCreditCardExpYY.setName("CreditCardExpYY");
-		fCreditCardExpYY.addActionListener(this);
-		fCreditCardExpYY.setStyle("margin: 0px 50px 0px 0px;"+HEIGHT+"width:"+60+"px;"+FONT_SIZE);
-			
+//		fCreditCardExpMM = ListboxFactory.newDropdownListbox();
+//		ValueNamePair[] data = getCCMonths();
+//		for(ValueNamePair pp : data) {
+//			fCreditCardExpMM.appendItem(String.valueOf(pp.getName()),pp.getID());
+//			fCreditCardExpMM.setName(String.valueOf(pp.getID()));
+//		}
+//		fCreditCardExpMM.setName("CreditCardExpMM");
+//		fCreditCardExpMM.addActionListener(this);
+//		fCreditCardExpMM.setStyle(HEIGHT+"width:"+75+"px;"+FONT_SIZE);
+//		
+//		//	For Card Year
+//		fCreditCardExpYY = ListboxFactory.newDropdownListbox();
+//		data = getCCYears();
+//		for(ValueNamePair pp : data) {
+//			fCreditCardExpYY.appendItem(String.valueOf(pp.getName()),pp.getID());
+//			fCreditCardExpYY.setName(String.valueOf(pp.getID()));
+//		}
+//		fCreditCardExpYY.setName("CreditCardExpYY");
+//		fCreditCardExpYY.addActionListener(this);
+//		fCreditCardExpYY.setStyle("margin: 0px 50px 0px 0px;"+HEIGHT+"width:"+60+"px;"+FONT_SIZE);
+//			
 		//	For Card VV
-		row.appendChild(fCreditCardExpMM);
-		row.appendChild(fCreditCardExpYY);
-		fCCardVC = new WPOSTextField(Msg.translate(p_ctx, "CVC"), keyboard);
-		row = rows.newRow();
+//		row.appendChild(fCreditCardExpMM);
+//		row.appendChild(fCreditCardExpYY);
+//		fCCardVC = new WPOSTextField(Msg.translate(p_ctx, "CVC"), keyboard);
+//		row = rows.newRow();
 		
-		row.appendChild(fCCardVC);
-		fCCardVC.addEventListener("onFocus", this);
-		fCCardVC.setStyle(HEIGHT+WIDTH+FONT_SIZE);
-
+//		row.appendChild(fCCardVC);
+//		fCCardVC.addEventListener("onFocus", this);
+//		fCCardVC.setStyle(HEIGHT+WIDTH+FONT_SIZE);
 	}
 	
 	/**
@@ -425,7 +454,21 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 			field.setValue(label.getValue());
 		
 	}
-		
+	
+	/**
+	 * Set Currency from values
+	 */
+	private void setCurrency() {
+		if(currency != null) {
+			setCurrencyId((Integer) currency.getValue());
+			setCurrencyDocumentId(v_Parent.getOrder().getC_Currency_ID());
+			setConversionTypeId(v_Parent.getM_POS().get_ValueAsInt("C_ConversionType_ID"));
+			setConvertedAmt();
+		} else {
+			setPayAmt(getInitPayAmt());
+		}
+	}
+	
 	@Override
 	public void onEvent(org.zkoss.zk.ui.event.Event e) throws Exception {
 		if(e.getTarget().equals(bMinus)){
@@ -434,8 +477,8 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 			String m_TenderType =  ((ValueNamePair) fTenderType.getValue()).getID();
 			setTenderType(m_TenderType);
 			changeViewPanel();
-			fPayAmt.setValue(getInitPayAmt());
-			setPayAmt((BigDecimal) fPayAmt.getValue());
+			setCurrency();
+			fPayAmt.setValue(getPayAmt());
 			v_Parent.refreshPanel();
 		} else if(e.getTarget().equals(fCheckdate)){
 			//	TODO add support to controller to be define
@@ -449,9 +492,12 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 			setPayAmt(getInitPayAmt());
 			v_Parent.refreshPanel();
 			fPayAmt.setValue(getOpenAmtCreditMemo());
-			
 			setPayAmt((BigDecimal) fPayAmt.getValue());
 			v_Parent.refreshPanel();
+		} else if(currency != null 
+				&& e.getTarget().equals(currency)) {
+			setCurrency();
+			fPayAmt.setValue(getPayAmt());
 		} else if(e.getName().equals(Events.ON_FOCUS)){
 			if(e.getTarget().equals(fCheckNo.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
 				isKeyboard = true;
@@ -487,28 +533,29 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 				fDebitCountry.setFocus(true);
 			} else if(e.getTarget().equals(fDebitCountry.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
 				isKeyboard = false;
-			} else if(e.getTarget().equals(fCCardNo.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
-				isKeyboard = true;
-				fCCardNo.showKeyboard();
-				setCreditCardNumber(fCCardNo.getText());
-				fCCardNo.setFocus(true);
-			} else if(e.getTarget().equals(fCCardNo.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
-				isKeyboard = false;
-			} else if(e.getTarget().equals(fCCardName.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
-				isKeyboard = true;
-				fCCardName.showKeyboard();
-				setA_Name(fCCardName.getText());
-				fCCardName.setFocus(true);
-			} else if(e.getTarget().equals(fCCardName.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
-				isKeyboard = false;
-			} else if(e.getTarget().equals(fCCardVC.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
-				isKeyboard = true;
-				fCCardVC.showKeyboard();
-				setCreditCardVV(fCCardVC.getText());
-				fCCardVC.setFocus(true);
-			} else if(e.getTarget().equals(fCCardVC.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
-				isKeyboard = false;
 			}
+//			else if(e.getTarget().equals(fCCardNo.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
+//				isKeyboard = true;
+//				fCCardNo.showKeyboard();
+//				setCreditCardNumber(fCCardNo.getText());
+//				fCCardNo.setFocus(true);
+//			} else if(e.getTarget().equals(fCCardNo.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
+//				isKeyboard = false;
+//			} else if(e.getTarget().equals(fCCardName.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
+//				isKeyboard = true;
+//				fCCardName.showKeyboard();
+//				setA_Name(fCCardName.getText());
+//				fCCardName.setFocus(true);
+//			} else if(e.getTarget().equals(fCCardName.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
+//				isKeyboard = false;
+//			} else if(e.getTarget().equals(fCCardVC.getComponent(WPOSTextField.SECONDARY)) && !isKeyboard) {
+//				isKeyboard = true;
+//				fCCardVC.showKeyboard();
+//				setCreditCardVV(fCCardVC.getText());
+//				fCCardVC.setFocus(true);
+//			} else if(e.getTarget().equals(fCCardVC.getComponent(WPOSTextField.PRIMARY)) && e.getName().equals(Events.ON_FOCUS)) {
+//				isKeyboard = false;
+//			}
 		} else if(e.getTarget().equals(fCCardType)) {
 			setCreditCardType((String) fCCardType.getValue());
 		}
@@ -532,8 +579,8 @@ public class WCollectDetail extends CollectDetail implements EventListener, POSP
 			}
 		}
 		v_Parent.refreshPanel();
-		setCreditCardExpMM((String)fCreditCardExpMM.getValue());
-		setCreditCardExpYY((String)fCreditCardExpYY.getValue());
+//		setCreditCardExpMM((String)fCreditCardExpMM.getValue());
+//		setCreditCardExpYY((String)fCreditCardExpYY.getValue());
 		
 	}
 	
