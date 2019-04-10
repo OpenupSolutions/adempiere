@@ -57,7 +57,7 @@ public class WPOSLookupProduct extends AutoComplete implements EventListener {
     private Integer partnerId = 0;
     private String fill = StringUtils.repeat(" " , 400);
     static private Integer PRODUCT_VALUE_LENGTH = 14;
-    static private Integer PRODUCT_NAME_LENGTH = 50;
+    static private Integer PRODUCT_NAME_LENGTH = 90;
     static private Integer QUANTITY_LENGTH = 16;
 
     private String separator = "|";
