@@ -55,6 +55,7 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MOrder;
 import org.compiere.model.MOrderLine;
+import org.compiere.model.MOrgInfo;
 import org.compiere.model.MPriceList;
 import org.compiere.model.MPriceListVersion;
 import org.compiere.model.MProduct;
@@ -88,6 +89,7 @@ import org.compiere.util.Msg;
 import org.eevolution.service.dsl.ProcessBuilder;
 import org.spin.process.CommissionOrderCreateAbstract;
 
+import com.eevolution.model.I_S_Contract;
 import com.eevolution.model.MSContract;
 
 
@@ -253,7 +255,7 @@ public class AgencyValidator implements ModelValidator
 						}
 					}
 				}
-			}else if(po instanceof MOrder) {
+			} else if(po instanceof MOrder) {
 				MOrder order = (MOrder) po;
 				MBPartner bPartner = (MBPartner) order.getC_BPartner();
 				if (bPartner.get_ValueAsBoolean("IsMandatoryOrderReference")) {
@@ -262,6 +264,14 @@ public class AgencyValidator implements ModelValidator
 								|| (order.get_ValueAsString("POReference") == null || order.get_ValueAsString("POReference") == "" ))) {
 							throw new AdempiereException(Msg.getMsg(Env.getCtx(), "LinkOrderNotFound"));
 						}
+					}
+				}
+			} else if(po instanceof MSContract) {
+				MSContract contract = (MSContract) po;
+				if(contract.is_ValueChanged(I_S_Contract.COLUMNNAME_M_PriceList_ID)) {
+					if(contract.getM_PriceList_ID() > 0) {
+						MPriceList priceList = MPriceList.get(contract.getCtx(), contract.getM_PriceList_ID(), contract.get_TrxName());
+						contract.setC_Currency_ID(priceList.getC_Currency_ID());
 					}
 				}
 			}
@@ -386,12 +396,9 @@ public class AgencyValidator implements ModelValidator
 					MOrder order = (MOrder) po;
 					int orderprojectId = order.getC_Project_ID();
 					if(orderprojectId > 0) {
-						if(order.getC_ConversionType_ID() <= 0) order.setC_ConversionType_ID(MConversionType.TYPE_SPOT);
-						/*MProject project = new MProject(order.getCtx(), orderprojectId,order.get_TrxName());
-					// Validates Customer Approved
-					if(!project.get_ValueAsBoolean("IsCustomerApproved")) {
-						throw new AdempiereException(Msg.parseTranslation(Env.getCtx(), "@CustomerApprovedRequired@"));
-					}*/
+						if(order.getC_ConversionType_ID() <= 0) {
+							order.setC_ConversionType_ID(MConversionType.TYPE_SPOT);
+						}
 					}
 					// Validates Order Has ProjectPorcentaje 
 					int serviceContractId = order.get_ValueAsInt("S_Contract_ID");
@@ -430,14 +437,6 @@ public class AgencyValidator implements ModelValidator
 						}
 					}
 				}
-				/*else if(po instanceof MOrder) {
-				MOrder order = (MOrder) po;
-				// When the new Order is Purchase Order
-				if(!order.isSOTrx()){
-					int orderID =	order.getC_Order_ID();
-
-				}
-			}*/
 			}
 		}
 			//
@@ -488,11 +487,6 @@ public class AgencyValidator implements ModelValidator
 						if(order.getC_Project_ID() <= 0) {
 							throw new AdempiereException(Msg.parseTranslation(Env.getCtx(), "@C_Project_ID@ @NotFound@"));
 						}
-						//	Document type IsCustomerApproved = Y and order IsCustomerApproved Y and order isAttachment() = N and project IsCustomerApproved = N
-						/*MProject project = new MProject(order.getCtx(), order.getC_Project_ID(), null);
-					if (!project.get_ValueAsBoolean("IsCustomerApproved")) {
-						throw new AdempiereException(Msg.parseTranslation(Env.getCtx(), "@CustomerApprovedRequired@ @C_Project_ID@"));
-					}*/
 					}
 					//	Validate Document Type for commission
 					if(documentType.get_ValueAsInt("C_CommissionType_ID") > 0) {
@@ -565,7 +559,8 @@ public class AgencyValidator implements ModelValidator
 								MPriceListVersion priceListVersion = new MPriceListVersion(priceList.getCtx(), priceList.getM_PriceList_ID(), priceList.get_TrxName());
 								MProduct product = new MProduct (orderLine.getCtx(), orderLine.getM_Product_ID(), orderLine.get_TrxName());
 								MProductPrice productPrice = new MProductPrice(orderLine.getCtx(), priceListVersion.getM_PriceList_Version_ID(), product.getM_Product_ID(), orderLine.get_TrxName());
-								if (!productPrice.get_ValueAsBoolean("IsIncludedContract")) {
+								if (!productPrice.get_ValueAsBoolean("IsIncludedContract")
+										&& !orderLine.get_ValueAsBoolean("IsBonusProduct")) {
 									BigDecimal priceEntered = orderLine.getPriceEntered();						
 									if( priceEntered.compareTo(BigDecimal.ZERO) == 0) {
 										throw new AdempiereException(Msg.parseTranslation(Env.getCtx(), "@PriceEntereddontBeZero@"));
@@ -734,13 +729,6 @@ public class AgencyValidator implements ModelValidator
 								if(sumPercent.compareTo(Env.ONEHUNDRED) != 0){					
 									throw new AdempiereException(Msg.getMsg(Env.getCtx(), "TotalPercentageIsNot100"));
 								}
-							} else { 
-								//					List<MCommissionLine> c = new Query(po.getCtx(), I_C_CommissionLine.Table_Name, whereClause, po.get_TrxName())
-								//							.setParameters(serviceContract.getS_Contract_ID())
-								//							.setOnlyActiveRecords(true)
-								//							.<MCommissionLine>list();
-								//					//	Iterate
-								//					
 							}
 				}
 			}
@@ -942,6 +930,9 @@ public class AgencyValidator implements ModelValidator
 		 * @param
 		 */
 		private void createCommissionForOrder(MOrder order, int commissionTypeId, boolean splitDocuments) {
+			if(MOrgInfo.get(order.getCtx(), order.getAD_Org_ID(), order.get_TrxName()).get_ValueAsBoolean("IsExcludeOfCommission")) {
+				return;
+			}
 			removeLineFromCommission(order, commissionTypeId);
 			new Query(order.getCtx(), I_C_Commission.Table_Name, I_C_CommissionType.COLUMNNAME_C_CommissionType_ID + " = ? "
 					+ "AND IsSplitDocuments = ?", order.get_TrxName())
@@ -1003,6 +994,9 @@ public class AgencyValidator implements ModelValidator
 		 * @param
 		 */
 		private void createCommissionForInvoice(MInvoice invoice, int commissionTypeId, boolean splitDocuments) {
+			if(MOrgInfo.get(invoice.getCtx(), invoice.getAD_Org_ID(), invoice.get_TrxName()).get_ValueAsBoolean("IsExcludeOfCommission")) {
+				return;
+			}
 			removeLineFromCommission(invoice, commissionTypeId);
 			new Query(invoice.getCtx(), I_C_Commission.Table_Name, I_C_CommissionType.COLUMNNAME_C_CommissionType_ID + " = ? "
 					+ "AND IsSplitDocuments = ?", invoice.get_TrxName())
