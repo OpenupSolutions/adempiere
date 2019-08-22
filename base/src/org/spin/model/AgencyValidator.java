@@ -26,6 +26,7 @@ import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.I_AD_Image;
 import org.compiere.model.I_C_BPartner;
 import org.compiere.model.I_C_Commission;
+import org.compiere.model.I_C_CommissionLine;
 import org.compiere.model.I_C_CommissionRun;
 import org.compiere.model.I_C_CommissionSalesRep;
 import org.compiere.model.I_C_CommissionType;
@@ -35,6 +36,7 @@ import org.compiere.model.I_C_OrderLine;
 import org.compiere.model.I_C_Project;
 import org.compiere.model.I_C_ProjectPhase;
 import org.compiere.model.I_C_ProjectTask;
+import org.compiere.model.I_C_RfQ;
 import org.compiere.model.I_C_RfQResponse;
 import org.compiere.model.I_R_Request;
 import org.compiere.model.I_S_TimeExpense;
@@ -46,6 +48,7 @@ import org.compiere.model.MCommission;
 import org.compiere.model.MCommissionLine;
 import org.compiere.model.MCommissionRun;
 import org.compiere.model.MConversionType;
+import org.compiere.model.MCurrency;
 import org.compiere.model.MDocType;
 import org.compiere.model.MImage;
 import org.compiere.model.MInOut;
@@ -340,6 +343,22 @@ public class AgencyValidator implements ModelValidator
 								linkSourceOrder.set_ValueOfColumn("IsDirectInvoice", order.get_ValueAsBoolean("IsDirectInvoice"));
 							}
 							linkSourceOrder.saveEx();
+							//	Copy commission from RFQ Response
+							copyCommissionFromFRQResponse(order.get_ValueAsInt(I_C_RfQ.COLUMNNAME_C_RfQ_ID), linkSourceOrder);
+						}
+					}
+					//	For counter document
+					if(order.getRef_Order_ID() > 0
+							&& !order.isProcessed()) {
+						MOrder sourceOrder = (MOrder) order.getRef_Order();
+						if(sourceOrder.getC_Currency_ID() != order.getC_Currency_ID()) {
+							MCurrency currency = MCurrency.get(sourceOrder.getCtx(), sourceOrder.getC_Currency_ID());
+							MPriceList defaultPriceList = MPriceList.getDefault(sourceOrder.getCtx(), order.isSOTrx(), currency.getISO_Code());
+							if(defaultPriceList != null) {
+								order.setM_PriceList_ID(defaultPriceList.getM_PriceList_ID());
+							} else {
+								throw new IllegalArgumentException("@DefaultPriceListCurrencyNotFound@ (@C_Currency_ID@: " + currency.getISO_Code() + ")");
+							}
 						}
 					}
 				} else if(po instanceof MProjectTask) {
@@ -442,6 +461,30 @@ public class AgencyValidator implements ModelValidator
 			return null;
 		}	//	modelChange
 
+		/**
+		 * Copy commission from RFQ Response to Purchase Order	
+		 * @param RFQ reference
+		 * @param linkSourceOrder
+		 */
+		private void copyCommissionFromFRQResponse(int rFQId, MOrder linkSourceOrder) {
+			new Query(linkSourceOrder.getCtx(), I_C_CommissionLine.Table_Name, 
+					"EXISTS(SELECT 1 FROM C_RfQResponse rr "
+					+ "		WHERE rr.C_RfQResponse_ID = C_CommissionLine.C_RfQResponse_ID "
+					+ "		AND rr.C_RfQ_ID = ? "
+					+ "		AND rr.IsSelectedWinner = 'Y' "
+					+ "		AND rr.IsComplete = 'Y')", linkSourceOrder.get_TrxName())
+				.setParameters(rFQId)
+				.setOnlyActiveRecords(true)
+				.<MCommissionLine>list()
+				.forEach(commissionLine -> {
+					MCommissionLine lineToAdd = new MCommissionLine(commissionLine.getCtx(),0, commissionLine.get_TrxName());
+					PO.copyValues(commissionLine, lineToAdd);
+					lineToAdd.set_ValueOfColumn(I_C_RfQResponse.COLUMNNAME_C_RfQResponse_ID, null);
+					lineToAdd.set_ValueOfColumn(I_C_Order.COLUMNNAME_C_Order_ID, linkSourceOrder.getC_Order_ID());
+					lineToAdd.saveEx();
+				});
+		}
+
 		@Override
 		public String docValidate (PO po, int timing) {
 			log.info(po.get_TableName() + " Timing: "+timing);
@@ -462,14 +505,35 @@ public class AgencyValidator implements ModelValidator
 					}
 					//	Validate User1_ID
 					if(order.get_ValueAsInt("S_Contract_ID") > 0 && order.getRef_Order_ID() <= 0) {
-						int user1Id = DB.getSQLValue(order.get_TrxName(), "SELECT p.User1_ID "
-								+ "FROM S_ContractParties p "
-								+ "WHERE S_Contract_ID = ? "
-								+ "AND EXISTS(SELECT 1 FROM AD_User u WHERE u.AD_User_ID = p.AD_User_ID AND u.C_BPartner_ID = ?)", order.get_ValueAsInt("S_Contract_ID"), order.getC_BPartner_ID());
-						//
-						if(user1Id > 0) {
-							order.setUser1_ID(user1Id);
-							order.saveEx();
+						//	For Split Order
+						if(order.get_ValueAsInt(I_C_CommissionRun.COLUMNNAME_C_CommissionRun_ID) > 0) {
+							MCommissionRun commissionRun = new MCommissionRun(order.getCtx(), order.get_ValueAsInt(I_C_CommissionRun.COLUMNNAME_C_CommissionRun_ID), order.get_TrxName());
+							if(commissionRun.get_ValueAsInt(I_S_Contract.COLUMNNAME_S_Contract_ID) > 0) {
+								MSContract contract = new MSContract(order.getCtx(), commissionRun.get_ValueAsInt(I_S_Contract.COLUMNNAME_S_Contract_ID), order.get_TrxName());
+								order.setAD_Org_ID(contract.getAD_Org_ID());
+								if(contract.getUser1_ID() > 0) {
+									order.setUser1_ID(contract.getUser1_ID());
+								}
+								//	Get brand from business partner
+								int user1Id = DB.getSQLValue(order.get_TrxName(), "SELECT p.User1_ID "
+										+ "FROM S_ContractParties p "
+										+ "WHERE S_Contract_ID = ? "
+										+ "AND EXISTS(SELECT 1 FROM AD_User u WHERE u.AD_User_ID = p.AD_User_ID AND u.C_BPartner_ID = ?)", contract.getS_Contract_ID(), order.getC_BPartner_ID());
+								//
+								if(user1Id > 0) {
+									order.setUser3_ID(user1Id);
+								}
+							}
+						} else {
+							int user1Id = DB.getSQLValue(order.get_TrxName(), "SELECT p.User1_ID "
+									+ "FROM S_ContractParties p "
+									+ "WHERE S_Contract_ID = ? "
+									+ "AND EXISTS(SELECT 1 FROM AD_User u WHERE u.AD_User_ID = p.AD_User_ID AND u.C_BPartner_ID = ?)", order.get_ValueAsInt("S_Contract_ID"), order.getC_BPartner_ID());
+							//
+							if(user1Id > 0) {
+								order.setUser1_ID(user1Id);
+								order.saveEx();
+							}
 						}
 					}
 					// Document type IsCustomerApproved = Y and order IsCustomerApproved = N
