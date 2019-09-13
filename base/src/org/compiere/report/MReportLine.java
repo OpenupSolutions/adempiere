@@ -260,6 +260,20 @@ public class MReportLine extends X_PA_ReportLine
 				whereClause = "";
 			} else if (sources.length == 1) {
 				whereClause = sources[0].getWhereClause(PA_Hierarchy_ID);
+
+				if(sources[0].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[0].get_ValueAsInt("M_Product_Group_ID") > 0){
+					whereClause+= " AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Group_ID = " + sources[0].get_ValueAsInt("M_Product_Group_ID") + ")";
+				}
+				if(sources[0].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[0].get_ValueAsInt("M_Product_Class_ID") > 0){
+					whereClause+= " AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Class_ID = " + sources[0].get_ValueAsInt("M_Product_Class_ID") + ")";
+				}
+				if(sources[0].getElementType().equals(MReportSource.ELEMENTTYPE_BPartner) && sources[0].get_ValueAsInt("C_BP_Group_ID") > 0){
+					whereClause+= " AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_BPartner WHERE C_BP_Group_ID = " + sources[0].get_ValueAsInt("C_BP_Group_ID") + ")";
+				}
+				if(sources[0].get_ValueAsString("WhereClause") != null && !sources[0].get_ValueAsString("WhereClause").equalsIgnoreCase("")){
+					whereClause+= " " + sources[0].get_ValueAsString("WhereClause");
+				}
+
 			} else {
 				//	Multiple
 				StringBuffer sb = new StringBuffer ("(");
@@ -268,6 +282,19 @@ public class MReportLine extends X_PA_ReportLine
 						sb.append (" OR ");
 					}
 					sb.append (sources[i].getWhereClause(PA_Hierarchy_ID));
+
+					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[i].get_ValueAsInt("M_Product_Group_ID") > 0){
+						sb.append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Group_id = " + sources[i].get_ValueAsInt("M_Product_Group_ID") + ")");
+					}
+					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[i].get_ValueAsInt("M_Product_Class_ID") > 0){
+						whereClause+= " AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Class_ID = " + sources[i].get_ValueAsInt("M_Product_Class_ID") + ")";
+					}
+					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_BPartner) && sources[i].get_ValueAsInt("C_BP_Group_ID") > 0){
+						whereClause+= " AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_BPartner WHERE C_BP_Group_ID = " + sources[i].get_ValueAsInt("C_BP_Group_ID") + ")";
+					}
+					if(sources[i].get_ValueAsString("WhereClause") != null && !sources[i].get_ValueAsString("WhereClause").equalsIgnoreCase("")){
+						whereClause+= " " + sources[i].get_ValueAsString("WhereClause");
+					}
 				}
 				sb.append (")");
 				whereClause = sb.toString ();
@@ -292,6 +319,8 @@ public class MReportLine extends X_PA_ReportLine
 					// end globalqss
 				}
 			}
+
+
 			log.fine(whereClause);
 		}
 		return whereClause;
@@ -461,6 +490,16 @@ public class MReportLine extends X_PA_ReportLine
 					combinationGroupBy
 							.add(MReportSource.COLUMNNAME_C_BPartner_ID);
 				}
+
+				if (source.get_ValueAsInt("C_BP_Group_ID") != 0) {
+					select.append(" AND fb.")
+							.append("C_BP_Group_ID")
+							.append("=x.")
+							.append("C_BP_Group_ID");
+					combinationGroupBy
+							.add("C_BP_Group_ID");
+				}
+
 				if (source.getM_Product_ID() != 0
 						|| source.isIncludeNullsProduct()) {
 					select.append(" AND fb.")
@@ -470,6 +509,24 @@ public class MReportLine extends X_PA_ReportLine
 					combinationGroupBy
 							.add(MReportSource.COLUMNNAME_M_Product_ID);
 				}
+
+				if (source.get_ValueAsInt("M_Product_Group_ID") != 0) {
+					select.append(" AND fb.")
+							.append("M_Product_Group_ID")
+							.append("=x.")
+							.append("M_Product_Group_ID");
+					combinationGroupBy
+							.add("M_Product_Group_ID");
+				}
+				if (source.get_ValueAsInt("M_Product_Class_ID") != 0) {
+					select.append(" AND fb.")
+							.append("M_Product_Class_ID")
+							.append("=x.")
+							.append("M_Product_Class_ID");
+					combinationGroupBy
+							.add("M_Product_Class_ID");
+				}
+
 				if (source.getC_Location_ID() != 0
 						|| source.isIncludeNullsLocation()) {
 					select.append(" AND fb.").append("C_LocFrom_ID")
