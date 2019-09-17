@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.I_PA_ReportSource;
 import org.compiere.model.MAcctSchemaElement;
 import org.compiere.model.Query;
@@ -131,19 +132,24 @@ public class MReportLine extends X_PA_ReportLine
 		String ColumnName = null;
 		for (int i = 0; i < sources.length; i++)
 		{
-			String col = null;
-			if(sources[i].getElementType().equals("CO"))
-			{
-				col = sources[i].getCombinationKey();
-			}
-			else
-				col = MAcctSchemaElement.getColumnName (sources[i].getElementType());
-			if (ColumnName == null || ColumnName.length() == 0)
-				ColumnName = col;
-			else if (!ColumnName.equals(col))
-			{
-				log.config("More than one: " + ColumnName + " - " + col);
-				return null;
+
+			MReportSource s = sources[i];
+			if (s.isListSources()) {
+
+				String col = null;
+				if(sources[i].getElementType().equals("CO"))
+				{
+					col = sources[i].getCombinationKey();
+				}
+				else
+					col = MAcctSchemaElement.getColumnName (sources[i].getElementType());
+				if (ColumnName == null || ColumnName.length() == 0)
+					ColumnName = col;
+				else if (!ColumnName.equals(col))
+				{
+					log.config("More than one: " + ColumnName + " - " + col);
+					return null;
+				}
 			}
 		}
 		return ColumnName;
@@ -279,21 +285,27 @@ public class MReportLine extends X_PA_ReportLine
 				StringBuffer sb = new StringBuffer ("(");
 				for (int i = 0; i < sources.length; i++) {
 					if (i > 0) {
-						sb.append (" OR ");
+						//sb.append (" AND ");
+						MReportSource source = sources[i];
+						String operator = source.get_ValueAsString("SQL_Operator");
+						if(operator != null){
+							sb.append (" " + operator + " ");
+						} else throw new AdempiereException("No hay operador definido en fuente de informe");
 					}
+
 					sb.append (sources[i].getWhereClause(PA_Hierarchy_ID));
 
 					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[i].get_ValueAsInt("M_Product_Group_ID") > 0){
-						sb.append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Group_id = " + sources[i].get_ValueAsInt("M_Product_Group_ID") + ")");
+						sb.append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Group_ID = " + sources[i].get_ValueAsInt("M_Product_Group_ID") + ")");
 					}
 					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_Product) && sources[i].get_ValueAsInt("M_Product_Class_ID") > 0){
-						whereClause+= " AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Class_ID = " + sources[i].get_ValueAsInt("M_Product_Class_ID") + ")";
+						sb.append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Class_ID = " + sources[i].get_ValueAsInt("M_Product_Class_ID") + ")");
 					}
 					if(sources[i].getElementType().equals(MReportSource.ELEMENTTYPE_BPartner) && sources[i].get_ValueAsInt("C_BP_Group_ID") > 0){
-						whereClause+= " AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_BPartner WHERE C_BP_Group_ID = " + sources[i].get_ValueAsInt("C_BP_Group_ID") + ")";
+						sb.append(" AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_BPartner WHERE C_BP_Group_ID = " + sources[i].get_ValueAsInt("C_BP_Group_ID") + ")");
 					}
 					if(sources[i].get_ValueAsString("WhereClause") != null && !sources[i].get_ValueAsString("WhereClause").equalsIgnoreCase("")){
-						whereClause+= " " + sources[i].get_ValueAsString("WhereClause");
+						sb.append(" " + sources[i].get_ValueAsString("WhereClause"));
 					}
 				}
 				sb.append (")");
