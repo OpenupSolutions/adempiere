@@ -37,7 +37,7 @@ import java.util.Properties;
 public class MRequest extends X_R_Request
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6049674214655497548L;
 
@@ -57,7 +57,7 @@ public class MRequest extends X_R_Request
 		if (indexEnd == -1)
 			return 0;
 		//
-		indexStart += 5; 
+		indexStart += 5;
 		String idString = mailText.substring(indexStart, indexEnd);
 		int R_Request_ID = 0;
 		try
@@ -77,8 +77,10 @@ public class MRequest extends X_R_Request
 	private static final String		TAG_START = "[Req#";
 	/** Request Tag End					*/
 	private static final String		TAG_END = "#ID]";
-	
-	
+	/**	Process Message 			*/
+	private String		m_processMsg = null;
+
+
 	/**************************************************************************
 	 * 	Constructor
 	 * 	@param ctx context
@@ -91,15 +93,15 @@ public class MRequest extends X_R_Request
 		if (R_Request_ID == 0)
 		{
 			setDueType (DUETYPE_Due);
-		//  setSalesRep_ID (0);
-		//	setDocumentNo (null);
+			//  setSalesRep_ID (0);
+			//	setDocumentNo (null);
 			setConfidentialType (CONFIDENTIALTYPE_PublicInformation);	// A
 			setConfidentialTypeEntry (CONFIDENTIALTYPEENTRY_PublicInformation);	// A
 			setProcessed (false);
 			setRequestAmt (Env.ZERO);
 			setPriorityUser (PRIORITY_Low);
-		//  setR_RequestType_ID (0);
-		//  setSummary (null);
+			//  setR_RequestType_ID (0);
+			//  setSummary (null);
 			setIsEscalated (false);
 			setIsSelfService (false);
 			setIsInvoiced (false);
@@ -116,7 +118,7 @@ public class MRequest extends X_R_Request
 	 *	@param trxName transaction
 	 */
 	public MRequest (Properties ctx, int SalesRep_ID,
-		int R_RequestType_ID, String Summary, boolean isSelfService, String trxName)
+					 int R_RequestType_ID, String Summary, boolean isSelfService, String trxName)
 	{
 		this(ctx, 0, trxName);
 		set_Value ("SalesRep_ID", new Integer(SalesRep_ID));	//	could be 0
@@ -158,9 +160,9 @@ public class MRequest extends X_R_Request
 	private StringBuffer	m_emailTo = new StringBuffer();
 
 	/** Separator line				*/
-	public static final String	SEPARATOR = 
-		"\n---------.----------.----------.----------.----------.----------\n";
-	
+	public static final String	SEPARATOR =
+			"\n---------.----------.----------.----------.----------.----------\n";
+
 	/**************************************************************************
 	 * 	Set Default Request Type.
 	 */
@@ -188,7 +190,7 @@ public class MRequest extends X_R_Request
 		else
 			setR_Status_ID(status.getR_Status_ID());
 	}	//	setR_Status_ID
-	
+
 	/**
 	 * 	Add To Result
 	 * 	@param Result
@@ -224,7 +226,7 @@ public class MRequest extends X_R_Request
 		super.setDueType(DueType);
 	}	//	setDueType
 
-	
+
 	/**************************************************************************
 	 * 	Get Action History
 	 *	@return array of actions
@@ -233,9 +235,9 @@ public class MRequest extends X_R_Request
 	{
 		final String whereClause = MRequestAction.COLUMNNAME_R_Request_ID+"=?";
 		List<MRequestAction> list = new Query(getCtx(), I_R_RequestAction.Table_Name, whereClause, get_TrxName())
-										.setParameters(get_ID())
-										.setOrderBy("Created DESC")
-										.list();
+				.setParameters(get_ID())
+				.setOrderBy("Created DESC")
+				.list();
 		return list.toArray(new MRequestAction[list.size()]);
 	}	//	getActions
 
@@ -248,9 +250,9 @@ public class MRequest extends X_R_Request
 	{
 		final String whereClause = MRequestUpdate.COLUMNNAME_R_Request_ID+"=?";
 		List<MRequestUpdate> listUpdates = new Query(getCtx(), I_R_RequestUpdate.Table_Name, whereClause, get_TrxName())
-										.setParameters(get_ID())
-										.setOrderBy("Created DESC")
-										.list();
+				.setParameters(get_ID())
+				.setOrderBy("Created DESC")
+				.list();
 		ArrayList<MRequestUpdate> list = new ArrayList<MRequestUpdate>();
 		for (MRequestUpdate ru : listUpdates)
 		{
@@ -263,7 +265,7 @@ public class MRequest extends X_R_Request
 				//	Internal not if Customer/Public
 				if (ru.getConfidentialTypeEntry().equals(CONFIDENTIALTYPEENTRY_Internal)
 						&& (confidentialType.equals(CONFIDENTIALTYPEENTRY_PartnerConfidential)
-								|| confidentialType.equals(CONFIDENTIALTYPEENTRY_PublicInformation)))
+						|| confidentialType.equals(CONFIDENTIALTYPEENTRY_PublicInformation)))
 					continue;
 				//	No Customer if public
 				if (ru.getConfidentialTypeEntry().equals(CONFIDENTIALTYPEENTRY_PartnerConfidential)
@@ -277,7 +279,7 @@ public class MRequest extends X_R_Request
 		list.toArray(retValue);
 		return retValue;
 	}	//	getUpdates
-	
+
 	/**
 	 * 	Get Public Updates
 	 *	@return public updates
@@ -307,7 +309,7 @@ public class MRequest extends X_R_Request
 
 	/**
 	 *	Get Request Type
-	 *	@return Request Type 	
+	 *	@return Request Type
 	 */
 	public MRequestType getRequestType()
 	{
@@ -324,10 +326,10 @@ public class MRequest extends X_R_Request
 		return m_requestType;
 	}	//	getRequestType
 
-	
+
 	/**
 	 *	Get Request Type Text (for jsp)
-	 *	@return Request Type Text	
+	 *	@return Request Type Text
 	 */
 	public String getRequestTypeName()
 	{
@@ -383,7 +385,7 @@ public class MRequest extends X_R_Request
 			return "";
 		return grp.getName();
 	}	//	getGroupName
-	
+
 	/**
 	 * 	Get Status
 	 *	@return status
@@ -394,7 +396,7 @@ public class MRequest extends X_R_Request
 			return null;
 		return MStatus.get(getCtx(), getR_Status_ID());
 	}	//	getStatus
-	
+
 	/**
 	 * 	Get Request Status Name
 	 *	@return name
@@ -406,7 +408,7 @@ public class MRequest extends X_R_Request
 			return "?";
 		return sta.getName();
 	}	//	getStatusName
-	
+
 	/**
 	 * 	Get Request Resolution
 	 *	@return resolution
@@ -417,7 +419,7 @@ public class MRequest extends X_R_Request
 			return null;
 		return MResolution.get(getCtx(), getR_Resolution_ID());
 	}	//	getResolution
-	
+
 	/**
 	 * 	Get Request Resolution Name
 	 *	@return name
@@ -456,7 +458,7 @@ public class MRequest extends X_R_Request
 	{
 		return MRefList.getListName(getCtx(), DUETYPE_AD_Reference_ID, getDueType());
 	}	//	getDueTypeText
-	
+
 	/**
 	 * 	Get Priority Text (for jsp)
 	 *	@return text
@@ -492,7 +494,7 @@ public class MRequest extends X_R_Request
 	{
 		return MRefList.getListName(getCtx(), CONFIDENTIALTYPEENTRY_AD_Reference_ID, getConfidentialTypeEntry());
 	}	//	getConfidentialTextEntry
-	
+
 	/**
 	 * 	Set Date Last Alert to today
 	 */
@@ -511,7 +513,7 @@ public class MRequest extends X_R_Request
 			return null;
 		return MUser.get(getCtx(), getSalesRep_ID());
 	}	//	getSalesRep
-	
+
 	/**
 	 * 	Get Sales Rep Name
 	 *	@return Sales Rep User
@@ -548,7 +550,7 @@ public class MRequest extends X_R_Request
 			m_user = new MUser(getCtx(), getAD_User_ID(), get_TrxName());
 		return m_user;
 	}	//	getUser
-	
+
 	/**
 	 * 	Get BPartner (may be not defined)
 	 *	@return Sales Rep User
@@ -581,7 +583,7 @@ public class MRequest extends X_R_Request
 			return false;
 		return status.isWebCanUpdate();
 	}	//	isWebCanUpdate
-	
+
 
 	/**
 	 * 	Set Priority
@@ -619,7 +621,7 @@ public class MRequest extends X_R_Request
 		if (getPriority() == null)
 			setPriority(getPriorityUser());
 	}	//	setPriority
-	
+
 	/**
 	 * 	Set Confidential Type Entry
 	 *	@param ConfidentialTypeEntry confidentiality
@@ -634,7 +636,7 @@ public class MRequest extends X_R_Request
 		else if (CONFIDENTIALTYPE_PrivateInformation.equals(getConfidentialType()))
 		{
 			if (CONFIDENTIALTYPE_Internal.equals(ConfidentialTypeEntry)
-				|| CONFIDENTIALTYPE_PrivateInformation.equals(ConfidentialTypeEntry))
+					|| CONFIDENTIALTYPE_PrivateInformation.equals(ConfidentialTypeEntry))
 				super.setConfidentialTypeEntry (ConfidentialTypeEntry);
 			else
 				super.setConfidentialTypeEntry (CONFIDENTIALTYPE_PrivateInformation);
@@ -642,8 +644,8 @@ public class MRequest extends X_R_Request
 		else if (CONFIDENTIALTYPE_PartnerConfidential.equals(getConfidentialType()))
 		{
 			if (CONFIDENTIALTYPE_Internal.equals(ConfidentialTypeEntry)
-				|| CONFIDENTIALTYPE_PrivateInformation.equals(ConfidentialTypeEntry)
-				|| CONFIDENTIALTYPE_PartnerConfidential.equals(ConfidentialTypeEntry))
+					|| CONFIDENTIALTYPE_PrivateInformation.equals(ConfidentialTypeEntry)
+					|| CONFIDENTIALTYPE_PartnerConfidential.equals(ConfidentialTypeEntry))
 				super.setConfidentialTypeEntry (ConfidentialTypeEntry);
 			else
 				super.setConfidentialTypeEntry (CONFIDENTIALTYPE_PartnerConfidential);
@@ -651,7 +653,7 @@ public class MRequest extends X_R_Request
 		else if (CONFIDENTIALTYPE_PublicInformation.equals(getConfidentialType()))
 			super.setConfidentialTypeEntry (ConfidentialTypeEntry);
 	}	//	setConfidentialTypeEntry
-	
+
 	/**
 	 * 	Web Update
 	 *	@param result result
@@ -667,7 +669,7 @@ public class MRequest extends X_R_Request
 		setResult(result);
 		return true;
 	}	//	webUpdate
-	
+
 	/**
 	 * 	String Representation
 	 *	@return info
@@ -705,12 +707,12 @@ public class MRequest extends X_R_Request
 	 */
 	public File createPDF (File file)
 	{
-	//	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
-	//	if (re == null)
-			return null;
-	//	return re.getPDF(file);
+		//	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
+		//	if (re == null)
+		return null;
+		//	return re.getPDF(file);
 	}	//	createPDF
-	
+
 	/**************************************************************************
 	 * 	Before Save
 	 *	@param newRecord new
@@ -728,7 +730,7 @@ public class MRequest extends X_R_Request
 					setIsInvoiced(m_requestType.isInvoiced());
 				if (getDateNextAction() == null && m_requestType.getAutoDueDateDays() > 0)
 					setDateNextAction(TimeUtil.addDays(new Timestamp(System.currentTimeMillis()),
-						m_requestType.getAutoDueDateDays()));
+							m_requestType.getAutoDueDateDays()));
 			}
 			//	Is Status Valid
 			if (getR_Status_ID() != 0)
@@ -756,13 +758,18 @@ public class MRequest extends X_R_Request
 				if (getCloseDate() != null)
 					setCloseDate(null);
 			}
-			if (status.isClosed() 
-				&& getCloseDate() == null)
+			if (status.isClosed()
+					&& getCloseDate() == null)
 				setCloseDate(new Timestamp(System.currentTimeMillis()));
-			if (status.isFinalClose())
-				setProcessed(true);
+			if (status.isFinalClose()){
+
+				if(!isProcessed()){
+
+					setProcessed(true);
+				}
+			}
 		}
-		
+
 		//	Confidential Info
 		if (getConfidentialType() == null)
 		{
@@ -798,11 +805,11 @@ public class MRequest extends X_R_Request
 			if (projectTask != null && getC_ProjectPhase_ID() <= 0)
 				setC_ProjectPhase_ID(projectTask.getC_ProjectPhase_ID());
 		}
-				
+
 		//	New
 		if (newRecord)
 			return true;
-		
+
 		//	Change Log
 		m_changed = false;
 		ArrayList<String> sendInfo = new ArrayList<String>();
@@ -833,11 +840,11 @@ public class MRequest extends X_R_Request
 			if (oldSalesRep_ID != 0)
 			{
 				//  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
-				Object[] args = new Object[] {getDocumentNo(), 
-					MUser.getNameOfUser(AD_User_ID),
-					MUser.getNameOfUser(oldSalesRep_ID),
-					MUser.getNameOfUser(getSalesRep_ID())
-					};
+				Object[] args = new Object[] {getDocumentNo(),
+						MUser.getNameOfUser(AD_User_ID),
+						MUser.getNameOfUser(oldSalesRep_ID),
+						MUser.getNameOfUser(getSalesRep_ID())
+				};
 				String msg = Msg.getMsg(getCtx(), "RequestActionTransfer", args);
 				addToResult(msg);
 				sendInfo.add("SalesRep_ID");
@@ -845,7 +852,8 @@ public class MRequest extends X_R_Request
 		}
 		checkChange(ra, "AD_Role_ID");
 		//
-		checkChange(ra, "Priority");
+		if (checkChange(ra, "Priority"))
+			sendInfo.add("Priority");
 		if (checkChange(ra, "PriorityUser"))
 			sendInfo.add("PriorityUser");
 		if (checkChange(ra, "IsEscalated"))
@@ -864,8 +872,8 @@ public class MRequest extends X_R_Request
 		checkChange(ra, "C_Payment_ID");
 		checkChange(ra, "M_InOut_ID");
 		checkChange(ra, "M_RMA_ID");
-	//	checkChange(ra, "C_Campaign_ID");
-	//	checkChange(ra, "RequestAmt");
+		//	checkChange(ra, "C_Campaign_ID");
+		//	checkChange(ra, "RequestAmt");
 		checkChange(ra, "IsInvoiced");
 		checkChange(ra, "C_Activity_ID");
 		checkChange(ra, "DateNextAction");
@@ -880,13 +888,21 @@ public class MRequest extends X_R_Request
 		//
 		if (m_changed)
 			ra.saveEx();
-		
+
 		//	Current Info
 		MRequestUpdate update = new MRequestUpdate(this);
-		if (update.isNewInfo())
+
+		//Openup. Nicolas Sarlabos. 28/11/2018. #11009.
+		if (update.isNewInfo() || this.getM_ProductSpent_ID() > 0)
 			update.saveEx();
 		else
 			update = null;
+		//Fin #11009.
+
+		//if (update.isNewInfo())
+		//	update.saveEx();
+		//else
+		//	update = null;
 		//
 		m_emailTo = new StringBuffer();
 		if (update != null || sendInfo.size() > 0)
@@ -896,7 +912,7 @@ public class MRequest extends X_R_Request
 			// this is, when changed the sales rep (solved in sendNotices)
 			// or when changed the request category or group or contact (unsolved - the old ones are notified)
 			sendNotices(sendInfo);
-			
+
 			//	Update
 			setDateLastAction(getUpdated());
 			setLastResult(getResult());
@@ -908,10 +924,9 @@ public class MRequest extends X_R_Request
 			setR_StandardResponse_ID(0);
 			setR_MailText_ID(0);
 			setResult(null);
-			// globalqss - these fields must be cleared (waiting to open bug in sf)
-		//	setM_ProductSpent_ID(0);
-		//	setQtySpent(null);
-		//	setQtyInvoiced(null);
+			setM_ProductSpent_ID(0);
+			setQtySpent(null);
+			setQtyInvoiced(null);
 		}
 		return true;
 	}	//	beforeSave
@@ -936,7 +951,7 @@ public class MRequest extends X_R_Request
 		}
 		return false;
 	}	//	checkChange
-	
+
 	/**
 	 *  Check the ability to send email.
 	 *  @return AD_Message or null if no error
@@ -947,7 +962,7 @@ public class MRequest extends X_R_Request
 	{
 		//  Mail Host
 		MClient client = MClient.get(getCtx());
-		if (client == null 
+		if (client == null
 			|| client.getSMTPHost() == null
 			|| client.getSMTPHost().length() == 0)
 			return "RequestActionEMailNoSMTP";
@@ -961,11 +976,11 @@ public class MRequest extends X_R_Request
 
 		//  Mail From real user
 		MUser from = MUser.get(getCtx(), Env.getAD_User_ID(getCtx()));
-		if (from == null 
+		if (from == null
 			|| from.getEMail() == null
 			|| from.getEMail().length() == 0)
 			return "RequestActionEMailNoFrom";
-		
+
 		//  Check that UI user is Request User
 //		int realSalesRep_ID = Env.getContextAsInt (getCtx(), "#AD_User_ID");
 //		if (realSalesRep_ID != getSalesRep_ID())
@@ -976,7 +991,7 @@ public class MRequest extends X_R_Request
 //		String msg = Msg.getMsg(getCtx(), "RequestActionEMailInfo", args);
 //		setLastResult(msg);
 		//
-		
+
 		return null;
 	}   //  checkEMail
 */
@@ -991,7 +1006,7 @@ public class MRequest extends X_R_Request
 		else if (getSalesRep_ID() != 0)
 			log.warning("Ignored - Tried to set SalesRep_ID to 0 from " + getSalesRep_ID());
 	}	//	setSalesRep_ID
-	
+
 	/**
 	 * 	After Save
 	 *	@param newRecord new
@@ -1002,7 +1017,7 @@ public class MRequest extends X_R_Request
 	{
 		if (!success)
 			return success;
-		
+
 		//	Create Update
 		if (newRecord && getResult() != null)
 		{
@@ -1015,7 +1030,7 @@ public class MRequest extends X_R_Request
 
 		//	ChangeRequest - created in Request Processor
 		if (getM_ChangeRequest_ID() != 0
-			&& is_ValueChanged(COLUMNNAME_R_Group_ID))	//	different ECN assignment?
+				&& is_ValueChanged(COLUMNNAME_R_Group_ID))	//	different ECN assignment?
 		{
 			int oldID = get_ValueOldAsInt(COLUMNNAME_R_Group_ID);
 			if (getR_Group_ID() == 0)
@@ -1027,11 +1042,11 @@ public class MRequest extends X_R_Request
 				MGroup oldG = MGroup.get(getCtx(), oldID);
 				MGroup newG = MGroup.get(getCtx(), getR_Group_ID());
 				if (oldG.getPP_Product_BOM_ID() != newG.getPP_Product_BOM_ID()
-					|| oldG.getM_ChangeNotice_ID() != newG.getM_ChangeNotice_ID())
+						|| oldG.getM_ChangeNotice_ID() != newG.getM_ChangeNotice_ID())
 				{
 					MChangeRequest ecr = new MChangeRequest(getCtx(), getM_ChangeRequest_ID(), get_TrxName());
 					if (!ecr.isProcessed()
-						|| ecr.getM_FixChangeNotice_ID() == 0)
+							|| ecr.getM_FixChangeNotice_ID() == 0)
 					{
 						ecr.setPP_Product_BOM_ID(newG.getPP_Product_BOM_ID());
 						ecr.setM_ChangeNotice_ID(newG.getM_ChangeNotice_ID());
@@ -1040,10 +1055,10 @@ public class MRequest extends X_R_Request
 				}
 			}
 		}
-		
+
 		if (m_emailTo.length() > 0)
 			log.saveInfo ("RequestActionEMailOK", m_emailTo.toString());
-		
+
 		return success;
 	}	//	afterSave
 
@@ -1051,7 +1066,7 @@ public class MRequest extends X_R_Request
 	 * 	Send transfer Message
 	 */
 /*TODO - red1 Never used locally  - check later
- * 	private void sendTransferMessage ()  
+ * 	private void sendTransferMessage ()
 	{
 		//	Sender
 		int AD_User_ID = Env.getContextAsInt(p_ctx, "#AD_User_ID");
@@ -1064,8 +1079,8 @@ public class MRequest extends X_R_Request
 			oldSalesRep_ID = ((Integer)oo).intValue();
 
 		//  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
-		Object[] args = new Object[] {getDocumentNo(), 
-			MUser.getNameOfUser(AD_User_ID), 
+		Object[] args = new Object[] {getDocumentNo(),
+			MUser.getNameOfUser(AD_User_ID),
 			MUser.getNameOfUser(oldSalesRep_ID),
 			MUser.getNameOfUser(getSalesRep_ID())
 			};
@@ -1078,7 +1093,7 @@ public class MRequest extends X_R_Request
 		client.sendEMail(from, to, subject, message, createPDF());
 	}	//	afterSaveTransfer
 */
-	
+
 	/**
 	 * 	Send Update EMail/Notices
 	 * 	@param list list of changes
@@ -1087,7 +1102,7 @@ public class MRequest extends X_R_Request
 	{
 		//	Subject
 		String subject = Msg.translate(getCtx(), "R_Request_ID")
-			+ " " + Msg.getMsg(getCtx(), "Updated") + ": " + getDocumentNo();
+				+ " " + Msg.getMsg(getCtx(), "Updated") + ": " + getDocumentNo();
 		//	Message
 		StringBuffer message = new StringBuffer();
 		//		UpdatedBy: Joe
@@ -1095,34 +1110,34 @@ public class MRequest extends X_R_Request
 		MUser from = MUser.get(getCtx(), UpdatedBy);
 		if (from != null)
 			message.append(Msg.translate(getCtx(), "UpdatedBy")).append(": ")
-				.append(from.getName());
-		//		LastAction/Created: ...	
+					.append(from.getName());
+		//		LastAction/Created: ...
 		if (getDateLastAction() != null)
 			message.append("\n").append(Msg.translate(getCtx(), "DateLastAction"))
-				.append(": ").append(getDateLastAction());
+					.append(": ").append(getDateLastAction());
 		else
 			message.append("\n").append(Msg.translate(getCtx(), "Created"))
-				.append(": ").append(getCreated());
+					.append(": ").append(getCreated());
 		//	Changes
 		for (int i = 0; i < list.size(); i++)
 		{
 			String columnName = (String)list.get(i);
 			message.append("\n").append(Msg.getElement(getCtx(), columnName))
-				.append(": ").append(get_DisplayValue(columnName, false))
-				.append(" -> ").append(get_DisplayValue(columnName, true));
+					.append(": ").append(get_DisplayValue(columnName, false))
+					.append(" -> ").append(get_DisplayValue(columnName, true));
 		}
 		//	NextAction
 		if (getDateNextAction() != null)
 			message.append("\n").append(Msg.translate(getCtx(), "DateNextAction"))
-				.append(": ").append(getDateNextAction());
+					.append(": ").append(getDateNextAction());
 		message.append(SEPARATOR)
-			.append(getSummary());
+				.append(getSummary());
 		if (getResult() != null)
 			message.append("\n----------\n").append(getResult());
 		message.append(getMailTrailer(null));
 		File pdf = createPDF();
 		log.finer(message.toString());
-		
+
 		//	Prepare sending Notice/Mail
 		MClient client = MClient.get(getCtx());
 		//	Reset from if external
@@ -1134,11 +1149,17 @@ public class MRequest extends X_R_Request
 		//
 		ArrayList<Integer> userList = new ArrayList<Integer>();
 		final String sql = "SELECT u.AD_User_ID, u.NotificationType, u.EMail, u.Name, MAX(r.AD_Role_ID) "
-			+ "FROM RV_RequestUpdates_Only ru"
-			+ " INNER JOIN AD_User u ON (ru.AD_User_ID=u.AD_User_ID OR u.AD_User_ID=?)"
-			+ " LEFT OUTER JOIN AD_User_Roles r ON (u.AD_User_ID=r.AD_User_ID) "
-			+ "WHERE ru.R_Request_ID=? "
-			+ "GROUP BY u.AD_User_ID, u.NotificationType, u.EMail, u.Name";
+				+ " FROM RV_RequestUpdates_Only ru"
+				+ " INNER JOIN AD_User u ON (ru.AD_User_ID=u.AD_User_ID OR u.AD_User_ID=?)"
+				+ " LEFT OUTER JOIN AD_User_Roles r ON (u.AD_User_ID=r.AD_User_ID) "
+				+ " WHERE ru.R_Request_ID=? "
+				+ " GROUP BY u.AD_User_ID, u.NotificationType, u.EMail, u.Name"
+				+ " UNION "
+				+ " SELECT u.AD_User_ID, u.NotificationType, u.EMail, u.Name, MAX(r.AD_Role_ID)"
+				+ " FROM AD_User u "
+				+ " JOIN AD_User_Roles r ON u.AD_User_ID = r.AD_User_ID "
+				+ " WHERE u.AD_User_ID=?"
+				+ " GROUP BY u.AD_User_ID, u.NotificationType, u.EMail, u.Name";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try
@@ -1146,6 +1167,7 @@ public class MRequest extends X_R_Request
 			pstmt = DB.prepareStatement (sql, get_TrxName());
 			pstmt.setInt (1, getSalesRep_ID());
 			pstmt.setInt (2, getR_Request_ID());
+			pstmt.setInt(3, getCreatedBy());
 			rs = pstmt.executeQuery ();
 			while (rs.next ())
 			{
@@ -1159,25 +1181,25 @@ public class MRequest extends X_R_Request
 				int AD_Role_ID = rs.getInt(5);
 				if (rs.wasNull())
 					AD_Role_ID = -1;
-				
+
 				//	Don't send mail to oneself
-		//		if (AD_User_ID == UpdatedBy)
-		//			continue;
-				
+				//		if (AD_User_ID == UpdatedBy)
+				//			continue;
+
 				//	No confidential to externals
-				if (AD_Role_ID == -1 
-					&& (getConfidentialTypeEntry().equals(CONFIDENTIALTYPE_Internal)
+				if (AD_Role_ID == -1
+						&& (getConfidentialTypeEntry().equals(CONFIDENTIALTYPE_Internal)
 						|| getConfidentialTypeEntry().equals(CONFIDENTIALTYPE_PrivateInformation)))
 					continue;
-				
+
 				if (X_AD_User.NOTIFICATIONTYPE_None.equals(NotificationType))
 				{
 					log.config("Opt out: " + Name);
 					continue;
 				}
 				if ((X_AD_User.NOTIFICATIONTYPE_EMail.equals(NotificationType)
-					|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
-					&& (email == null || email.length() == 0))
+						|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
+						&& (email == null || email.length() == 0))
 				{
 					if (AD_Role_ID >= 0)
 						NotificationType = X_AD_User.NOTIFICATIONTYPE_Notice;
@@ -1188,7 +1210,7 @@ public class MRequest extends X_R_Request
 					}
 				}
 				if (X_AD_User.NOTIFICATIONTYPE_Notice.equals(NotificationType)
-					&& AD_Role_ID >= 0)
+						&& AD_Role_ID >= 0)
 				{
 					log.config("No internal User: " + Name);
 					continue;
@@ -1203,9 +1225,9 @@ public class MRequest extends X_R_Request
 				MUser to = MUser.get (getCtx(), AD_User_ID);
 				//	Send Mail
 				if (X_AD_User.NOTIFICATIONTYPE_EMail.equals(NotificationType)
-					|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
+						|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
 				{
-					if (client.sendEMail(from, to, subject, message.toString(), pdf)) 
+					if (client.sendEMail(from, to, subject, message.toString(), pdf))
 					{
 						success++;
 						if (m_emailTo.length() > 0)
@@ -1221,12 +1243,12 @@ public class MRequest extends X_R_Request
 				}
 				//	Send Note
 				if (X_AD_User.NOTIFICATIONTYPE_Notice.equals(NotificationType)
-					|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
+						|| X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.equals(NotificationType))
 				{
 					int AD_Message_ID = 834;
 					MNote note = new MNote(getCtx(), AD_Message_ID, AD_User_ID,
-						X_R_Request.Table_ID, getR_Request_ID(),
-						subject, message.toString(), get_TrxName());
+							X_R_Request.Table_ID, getR_Request_ID(),
+							subject, message.toString(), get_TrxName());
 					if (note.save())
 						notices++;
 				}
@@ -1242,9 +1264,9 @@ public class MRequest extends X_R_Request
 			rs = null; pstmt = null;
 		}
 		log.info("EMail Success=" + success + ", Failure=" + failure
-			+ " - Notices=" + notices);
+				+ " - Notices=" + notices);
 	}	//	sendNotice
-	
+
 	/**************************************************************************
 	 * 	Get MailID
 	 * 	@param serverAddress server address
@@ -1253,10 +1275,10 @@ public class MRequest extends X_R_Request
 	public String getMailTrailer(String serverAddress)
 	{
 		StringBuffer sb = new StringBuffer("\n").append(SEPARATOR)
-			.append(Msg.translate(getCtx(), "R_Request_ID"))
-			.append(": ").append(getDocumentNo())
-			.append("  ").append(getMailTag())
-			.append("\nSent by AdempiereMail");
+				.append(Msg.translate(getCtx(), "R_Request_ID"))
+				.append(": ").append(getDocumentNo())
+				.append("  ").append(getMailTag())
+				.append("\nSent by AdempiereMail");
 		if (serverAddress != null)
 			sb.append(" from ").append(serverAddress);
 		return sb.toString();
@@ -1270,7 +1292,7 @@ public class MRequest extends X_R_Request
 	{
 		return TAG_START + get_ID() + TAG_END;
 	}	//	getMailTag
-	
+
 	/**
 	 * 	(Soft) Close request.
 	 * 	Must be called after webUpdate
@@ -1296,7 +1318,7 @@ public class MRequest extends X_R_Request
 				setR_Status_ID(newStatus.getR_Status_ID());
 		}
 	}	//	doClose
-	
+
 	/**
 	 * 	Escalate request
 	 * 	@param user true if user escalated - otherwise system
@@ -1332,5 +1354,5 @@ public class MRequest extends X_R_Request
 				setPriority(PRIORITY_Low);
 		}
 	}	//	doEscalate
-	
+
 }	//	MRequest
