@@ -34,6 +34,7 @@ import org.compiere.model.MProjectLine;
 import org.compiere.model.MProjectPhase;
 import org.compiere.model.MProjectTask;
 import org.compiere.model.MUOMConversion;
+import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.Util;
 
@@ -165,11 +166,15 @@ public class ProjectPhaseGenOrder  extends ProjectPhaseGenOrderAbstract
 			order.setDateOrdered(dateOrdered);
 		}
 
+		Timestamp dateOrder = order.getDateOrdered();
+		String sql = "select '" + dateOrder + "'::timestamp - 1";
+		dateOrder = DB.getSQLValueTS(get_TrxName(), sql);
+
 		for (MProjectLine pLine : projectLines) {
 
 			Timestamp datePromised = (Timestamp) pLine.get_Value("DatePromised");
 
-			if (datePromised.compareTo(order.getDateOrdered()) < 0)
+			if (datePromised.compareTo(dateOrder) < 0)
 				throw new AdempiereException("@DatePromisedProjectLine@");
 		}
 
