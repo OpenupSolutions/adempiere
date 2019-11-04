@@ -20,10 +20,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.I_AD_Image;
+import org.compiere.model.I_AD_Record_Access;
+import org.compiere.model.I_AD_User_Roles;
 import org.compiere.model.I_C_BPartner;
 import org.compiere.model.I_C_Commission;
 import org.compiere.model.I_C_CommissionLine;
@@ -65,6 +68,7 @@ import org.compiere.model.MProductPrice;
 import org.compiere.model.MProject;
 import org.compiere.model.MProjectPhase;
 import org.compiere.model.MProjectTask;
+import org.compiere.model.MRecordAccess;
 import org.compiere.model.MRequest;
 import org.compiere.model.MRequestType;
 import org.compiere.model.MRequestUpdate;
@@ -76,6 +80,8 @@ import org.compiere.model.MTimeExpense;
 import org.compiere.model.MTimeExpenseLine;
 import org.compiere.model.MTree;
 import org.compiere.model.MTree_NodeBP;
+import org.compiere.model.MUser;
+import org.compiere.model.MUserRoles;
 import org.compiere.model.ModelValidationEngine;
 import org.compiere.model.ModelValidator;
 import org.compiere.model.PO;
@@ -89,6 +95,8 @@ import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.Util;
+import org.eevolution.model.I_C_ProjectMember;
+import org.eevolution.model.MProjectMember;
 import org.eevolution.service.dsl.ProcessBuilder;
 import org.spin.process.CommissionOrderCreateAbstract;
 
@@ -123,6 +131,8 @@ public class AgencyValidator implements ModelValidator
 		engine.addModelChange(MRfQLineQty.Table_Name, this);
 		engine.addModelChange(MRfQResponse.Table_Name, this);
 		engine.addModelChange(MAttachment.Table_Name, this);
+		engine.addModelChange(I_C_ProjectMember.Table_Name, this);
+		engine.addModelChange(I_AD_User_Roles.Table_Name, this);
 		engine.addDocValidate(MOrder.Table_Name, this);
 		engine.addDocValidate(I_S_TimeExpense.Table_Name, this);
 		engine.addDocValidate(MTimeExpense.Table_Name, this);
@@ -438,30 +448,101 @@ public class AgencyValidator implements ModelValidator
 						}
 					}
 				}
-			} else if(type == TYPE_AFTER_CHANGE) {
-				if (po instanceof MBPartner
-						&& po.is_ValueChanged(I_C_BPartner.COLUMNNAME_BPartner_Parent_ID)) {
-					MBPartner bPartner = (MBPartner) po;
-					int treeId = MTree.getDefaultTreeIdFromTableId(bPartner.getAD_Client_ID(), I_C_BPartner.Table_ID);
-					if(treeId > 0) {
-						MTree tree = MTree.get(bPartner.getCtx(), treeId, null);
-						MTree_NodeBP node = MTree_NodeBP.get(tree, bPartner.getC_BPartner_ID());
-						if(node != null) {
-							int parentId = bPartner.getBPartner_Parent_ID();
-							if(parentId < 0) {
-								parentId = 0;
-							}
-							node.setParent_ID(parentId);
-							node.saveEx();
+			}
+		} else if(type == TYPE_BEFORE_DELETE) {
+			if(po instanceof MProjectMember) {
+				removeAccessToMember((MProjectMember) po);
+			}
+		} else if(type == TYPE_AFTER_NEW) {
+			if(po instanceof MProjectMember) {
+				addAccessToMember((MProjectMember) po);
+			} else if(po instanceof MUserRoles) {
+				MUserRoles userRoles = (MUserRoles) po;
+				MUser user = MUser.get(userRoles.getCtx(), userRoles.getAD_User_ID());
+				if(user.isProjectMember()) {
+					addAccessToUser(userRoles.getCtx(), 0, user.getAD_User_ID(), userRoles.get_TrxName());
+				}
+			}
+		} else if(type == TYPE_AFTER_CHANGE) {
+			if (po instanceof MBPartner
+					&& po.is_ValueChanged(I_C_BPartner.COLUMNNAME_BPartner_Parent_ID)) {
+				MBPartner bPartner = (MBPartner) po;
+				int treeId = MTree.getDefaultTreeIdFromTableId(bPartner.getAD_Client_ID(), I_C_BPartner.Table_ID);
+				if(treeId > 0) {
+					MTree tree = MTree.get(bPartner.getCtx(), treeId, null);
+					MTree_NodeBP node = MTree_NodeBP.get(tree, bPartner.getC_BPartner_ID());
+					if(node != null) {
+						int parentId = bPartner.getBPartner_Parent_ID();
+						if(parentId < 0) {
+							parentId = 0;
 						}
+						node.setParent_ID(parentId);
+						node.saveEx();
+					}
+				}
+			} else if(po instanceof MProjectMember) {
+				if(po.is_ValueChanged(I_C_ProjectMember.COLUMNNAME_IsActive)) {
+					MProjectMember projectMember = (MProjectMember) po;
+					if(projectMember.isActive()) {
+						addAccessToMember(projectMember);
+					} else {
+						removeAccessToMember(projectMember);
 					}
 				}
 			}
 		}
-			//
-			return null;
-		}	//	modelChange
+		//
+		return null;
+	}	//	modelChange
 
+	/**
+	 * Add access to member
+	 * @param projectMember
+	 */
+	private void addAccessToMember(MProjectMember projectMember) {
+		MRecordAccess accessForUser = new MRecordAccess(projectMember.getCtx(), -1, I_C_Project.Table_ID, projectMember.getC_Project_ID(), projectMember.get_TrxName());
+		accessForUser.set_ValueOfColumn(I_C_ProjectMember.COLUMNNAME_AD_User_ID, projectMember.getAD_User_ID());
+		accessForUser.setIsExclude(false);
+		accessForUser.setIsReadOnly(false);
+		accessForUser.setIsDependentEntities(true);
+		accessForUser.saveEx();
+	}
+	
+	/**
+	 * Add access to project user when project is created
+	 * @param context
+	 * @param projectId
+	 * @param userId
+	 * @param trxName
+	 */
+	private void addAccessToUser(Properties context, int projectId, int userId, String trxName) {
+		MRecordAccess currentRecordAccess = new Query(context, I_AD_Record_Access.Table_Name, "AD_User_ID = ? AND AD_Table_ID = ? AND Record_ID = ?", trxName)
+			.setParameters(userId, I_C_Project.Table_ID, projectId)
+			.first();
+		if(currentRecordAccess != null
+				&& currentRecordAccess.getAD_Table_ID() != 0) {
+			return;
+		}
+		MRecordAccess accessForUser = new MRecordAccess(context, -1, I_C_Project.Table_ID, projectId, trxName);
+		accessForUser.set_ValueOfColumn(I_C_ProjectMember.COLUMNNAME_AD_User_ID, userId);
+		accessForUser.setIsExclude(false);
+		accessForUser.setIsReadOnly(false);
+		accessForUser.setIsDependentEntities(true);
+		accessForUser.save();
+	}
+	
+	/**
+	 * Remove Access to member
+	 * @param projectMember
+	 */
+	private void removeAccessToMember(MProjectMember projectMember) {
+		new Query(projectMember.getCtx(), I_AD_Record_Access.Table_Name, "AD_User_ID = ? AND AD_Table_ID = ? AND Record_ID = ?", projectMember.get_TrxName())
+		.setParameters(projectMember.getAD_User_ID(), I_C_Project.Table_ID, projectMember.getC_Project_ID())
+		.<MRecordAccess>list()
+		.stream()
+		.forEach(access -> access.delete(true));
+	}
+	
 		/**
 		 * Copy commission from RFQ Response to Purchase Order	
 		 * @param RFQ reference
@@ -1180,7 +1261,7 @@ public class AgencyValidator implements ModelValidator
 				}
 			});
 			//	Reverse previous commission
-			reversePreviousCommissionOrders(invoice, reverseAmount.get());
+			reversePreviousCommissionOrders(invoice, reverseAmount.get().negate());
 		}
 
 		/**
