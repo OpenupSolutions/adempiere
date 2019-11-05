@@ -172,7 +172,7 @@ public class ProjectPhaseGenOrder  extends ProjectPhaseGenOrderAbstract
 			Timestamp datePromised = (Timestamp) pLine.get_Value("DatePromised");
 			Timestamp dateOrder = TimeUtil.addDays(order.getDateOrdered(), -1);
 
-			if (datePromised.compareTo(dateOrder) < 0)
+			if (datePromised.compareTo(dateOrder) < 0 || datePromised.compareTo(dateOrder) == 0)
 				throw new AdempiereException("@DatePromisedProjectLine@");
 		}
 
