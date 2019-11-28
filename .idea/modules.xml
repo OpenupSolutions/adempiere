@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/adempiere.iml" filepath="$PROJECT_DIR$/adempiere.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../adempiereEAM/org.adempiere.eam/src/main/java/adempiereEAM.iml" filepath="$PROJECT_DIR$/../adempiereEAM/org.adempiere.eam/src/main/java/adempiereEAM.iml" />
       <module fileurl="file://$PROJECT_DIR$/../customer_Coetc/customer_Coetc.iml" filepath="$PROJECT_DIR$/../customer_Coetc/customer_Coetc.iml" />
       <module fileurl="file://$PROJECT_DIR$/../opupMaintenance/src/org/openup/maintenance/maintenance.iml" filepath="$PROJECT_DIR$/../opupMaintenance/src/org/openup/maintenance/maintenance.iml" />
       <module fileurl="file://$PROJECT_DIR$/../opupCore/opupCore.iml" filepath="$PROJECT_DIR$/../opupCore/opupCore.iml" />

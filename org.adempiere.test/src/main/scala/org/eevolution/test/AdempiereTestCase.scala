@@ -18,8 +18,7 @@ package org.eevolution.test
 
 import org.compiere.model.{MOrg, MWarehouse}
 import org.compiere.util.{Env, Trx}
-
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.junit.runners.Suite
 
 /**
   * Define a trait to create an ADempiere test

@@ -160,7 +160,7 @@
       <src_folder value="file://$MODULE_DIR$/org.adempiere.test/src/main/scala" expected_position="32" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/bin" />
     <output-test url="file://$MODULE_DIR$/test" />
     <exclude-output />
@@ -199,7 +199,6 @@
       <sourceFolder url="file://$MODULE_DIR$/org.adempiere.test/src/main/scala" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/org.eevolution.warehouse/src/main/java/ui/zk" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/org.adempiere.production/src/main/java/base" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$" type="java-test-resource" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
@@ -1123,15 +1122,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="poi-3.9-20121203.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/tools/lib/poi-3.9-20121203.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library">
       <library name="OpenForecast-0.5.0.jar">
         <CLASSES>
@@ -1195,12 +1185,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.11.8:jar" level="project" />
-    <orderEntry type="library" name="SBT: javax.servlet:javax.servlet-api:3.0.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scalatest:scalatest_2.11:2.2.6:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe:config:1.2.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-xml_2.11:1.0.2:jar" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -1210,8 +1194,95 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="scripting-scala-0.1.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="scala-sdk-2.12.0" level="project" />
-    <orderEntry type="library" exported="" name="groovy-all-2.4.7" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/tools/lib/groovy-all-2.4.7.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/junit-4.12.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/log4j-1.2.17.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/poi-3.12-20150511.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/poi-excelant-3.12-20150511.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/poi-ooxml-3.12-20150511.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/poi-ooxml-schemas-3.12-20150511.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/poi-scratchpad-3.12-20150511.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/poi312/lib/xmlbeans-2.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Desarrollo/External Jars/jzebra.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
