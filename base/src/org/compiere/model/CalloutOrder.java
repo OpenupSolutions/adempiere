@@ -1128,7 +1128,8 @@ public class CalloutOrder extends CalloutEngine
 		}
 
 		//	Line Net Amt
-		BigDecimal lineNetAmount = null;
+		BigDecimal lineNetAmount = quantityOrdered.multiply(priceActual);
+
 		if(productId != 0) {
 			MProduct product = MProduct.get(ctx, productId);
 			if(product.getC_UOM_ID() != uOMToId
