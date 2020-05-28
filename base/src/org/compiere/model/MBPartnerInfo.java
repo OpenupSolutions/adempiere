@@ -60,8 +60,11 @@ public class MBPartnerInfo extends X_RV_BPartner
 			sb.append("UPPER(Value) LIKE ?");
 
 		taxId = getFindParameter (taxId);
-		if (taxId != null)
+		if (taxId != null) {
+			if (sb.length() > 0)
+				sb.append(" OR ");
 			sb.append("UPPER(TaxID) LIKE ?");
+		}
 
 		name = getFindParameter (name);
 		if (name != null)
@@ -115,6 +118,7 @@ public class MBPartnerInfo extends X_RV_BPartner
 			"RV_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 		ArrayList<MBPartnerInfo> list = new ArrayList<MBPartnerInfo>();
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try
 		{
 			pstmt = DB.prepareStatement(finalSQL, null);
@@ -135,7 +139,7 @@ public class MBPartnerInfo extends X_RV_BPartner
 				pstmt.setString(index++, phone);
 			if (city != null)
 				pstmt.setString(index++, city);
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 			while (rs.next())
 				list.add(new MBPartnerInfo (ctx, rs, null));
 			rs.close();
@@ -146,15 +150,8 @@ public class MBPartnerInfo extends X_RV_BPartner
 		{
 			s_log.log(Level.SEVERE, "find - " + finalSQL, e);
 		}
-		try
-		{
-			if (pstmt != null)
-				pstmt.close();
-			pstmt = null;
-		}
-		catch (Exception e)
-		{
-			pstmt = null;
+		finally {
+			DB.close(rs, pstmt);
 		}
 		//	Return
 		MBPartnerInfo[] retValue = new MBPartnerInfo[list.size()];
