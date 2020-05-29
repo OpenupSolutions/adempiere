@@ -106,10 +106,10 @@ public class InvoiceCreateFrom extends InvoiceCreateFromAbstract {
 			if (qtyInvoiced == null)
 				qtyInvoiced = qtyEntered;
 
-			invoiceLine.setQty(qtyEntered);							//	Movement/Entered
+			invoiceLine.setQty(qtyEntered);                            //	Movement/Entered
 			invoiceLine.setQtyInvoiced(qtyInvoiced);
-			if(createFromType.equals(ORDER)) {
-				MOrderLine orderLine = new MOrderLine (getCtx(), key, get_TrxName());
+			if (createFromType.equals(ORDER)) {
+				MOrderLine orderLine = new MOrderLine(getCtx(), key, get_TrxName());
 				//	Set reference
 				referenceId.set(orderLine.getC_Order_ID());
 				//	Set InOut
@@ -118,17 +118,22 @@ public class InvoiceCreateFrom extends InvoiceCreateFromAbstract {
 						+ "WHERE io.M_InOut_ID = M_InOutLine.M_InOut_ID "
 						+ "AND io.DocStatus IN ('CO','CL'))";
 				MInOutLine[] inOutLines = MInOutLine.getOfOrderLine(Env.getCtx(), key, whereClause, get_TrxName());
-				log.fine ("Receipt Lines with OrderLine = #" + inOutLines.length);
+				log.fine("Receipt Lines with OrderLine = #" + inOutLines.length);
 				final BigDecimal qty = qtyEntered;
 				MInOutLine inOutLine = Arrays.stream(inOutLines)
 						.filter(ioLine -> ioLine != null && ioLine.getQtyEntered().compareTo(qty) == 0)
 						.findFirst().orElseGet(() -> inOutLines.length > 0 ? inOutLines[0] : null);
+
+				if (invoice.getC_Order_ID() == 0) {
+					MOrder order = (MOrder) orderLine.getC_Order();
+					invoice.setM_PriceList_ID(order.getM_PriceList_ID());
+				}
 				//	Set From
-				if(inOutLine != null)
+				if (inOutLine != null)
 					invoiceLine.setShipLine(inOutLine);
 				else
 					invoiceLine.setOrderLine(orderLine);
-			} else if(createFromType.equals(INVOICE)) {
+			} else if (createFromType.equals(INVOICE)) {
 				MInvoiceLine fromLine = new MInvoiceLine(getCtx(), key, get_TrxName());
 				//	Set reference
 				referenceId.set(invoiceLine.getParent().getC_Invoice_ID());
