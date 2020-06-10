@@ -47,9 +47,9 @@
   </path>
 
   <path id="compilezk.classpath">
-	
-	
-    <pathelement location="../zkwebui/WEB-INF/classes"/>
+      <pathelement location="${domain_model_classes}"/>
+      <pathelement location="${swing_classes}"/>
+      <pathelement location="../zkwebui/WEB-INF/classes"/>
     
     <fileset dir="${project.trunk}/packages/ADempierePOS/lib">
       <include name="*.jar"/>
@@ -75,6 +75,7 @@
     <echo message="Compile ZK Classes "/>
     <javac encoding="UTF-8" srcdir="${zk_view}" destdir="${zk_classes}" includeantruntime="false" >
       <classpath refid="compile.domain.classpath"/>
+      <classpath refid="compile.classpath"/>
       <classpath refid="compilezk.classpath"/>
     </javac>
     
