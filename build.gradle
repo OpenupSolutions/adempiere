@@ -1,0 +1,303 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation files('lib/adempiereAll.xml')
+    implementation files('lib/adempiereApps.jar')
+    implementation files('lib/adempiereApps.war')
+    implementation files('lib/adempiereApps.xml')
+    implementation files('lib/Adempiere.jar')
+    implementation files('lib/adempiereRootBase.war')
+    implementation files('lib/adempiereRoot.jar')
+    implementation files('lib/adempiereRoot.xml')
+    implementation files('lib/adempiereWebCMbase.war')
+    implementation files('lib/adempiereWebCM.xml')
+    implementation files('lib/adempiereWebStore.war')
+    implementation files('lib/adempiereWebStore.xml')
+    implementation files('lib/ADInterface-1.0.war')
+
+    implementation files('lib/CheckConflicts.sh')
+    implementation files('lib/CompiereJasperReqs.jar')
+    implementation files('lib/CSTools.jar')
+    implementation files('lib/customization.jar')
+    implementation files('lib/earstructure.txt')
+    implementation files('lib/glassfish.jar')
+    implementation files('lib/jboss.jar')
+    implementation files('lib/mariadb-java-client.jar')
+    implementation files('lib/migrate.jar')
+    implementation files('lib/mobile.war')
+    implementation files('lib/mysql-connector-java-5.1.13-bin.jar')
+    implementation files('lib/oracle.jar')
+    implementation files('lib/patches.jar')
+    implementation files('lib/postgresql.jar')
+    implementation files('lib/server.xml')
+    implementation files('lib/tomcat.jar')
+    implementation files('lib/tomcatServerTemplate.xml')
+    implementation files('lib/webui.war')
+    implementation files('lib/zkcustomization.jar')
+    implementation files('lib/zkpatches.jar')
+
+    implementation files('commons-beanutils-1.9.3.jar')
+    implementation files('commons-digester-2.1.jar')
+    implementation files('jfreechart-1.0.13.jar')
+    implementation files('iReport.jar')
+    implementation files('jasperreports-fonts-6.6.0.jar')
+    implementation files('jasperreports-6.6.0.jar')
+
+    implementation files('tools/lib/httpclient-cache-4.5.6.jar')
+    implementation files('tools/lib/icepdf-core-6.2.2.jar')
+    implementation files('tools/lib/OpenForecast-0.5.0.jar')
+    implementation files('tools/lib/SoftwareLicenses.xls')
+    implementation files('tools/lib/ant-launcher.jar')
+    implementation files('tools/lib/io-7.1.1.jar')
+    implementation files('tools/lib/jnlp.jar')
+    implementation files('tools/lib/log4j.jar')
+    implementation files('tools/lib/batik-all-1.9.jar')
+    implementation files('tools/lib/xml-apis-1.3.04.jar')
+    implementation files('tools/lib/httpclient-win-4.5.6.jar')
+    implementation files('tools/lib/looks-2.0.4.jar')
+    implementation files('tools/lib/jstl.jar')
+    implementation files('tools/lib/ant.jar')
+    implementation files('tools/lib/commons-net-1.4.0.jar')
+    implementation files('tools/lib/miglayout-3.7.1-swing.jar')
+    implementation files('tools/lib/postgresql.jar')
+    implementation files('tools/lib/httpcore-4.4.10.jar')
+    implementation files('tools/lib/fluent-hc-4.5.6.jar')
+    implementation files('tools/lib/commons-codec-1.6.jar')
+    implementation files('tools/lib/commons-collections4-4.1.jar')
+    implementation files('tools/lib/pdfa-7.1.1.jar')
+    implementation files('tools/lib/jsp-api.jar')
+    implementation files('tools/lib/xmlgraphics-commons-2.2.jar')
+    implementation files('tools/lib/xercesImpl.jar')
+    implementation files('tools/lib/jython.jar')
+    implementation files('tools/lib/httpclient-4.5.6.jar')
+    implementation files('tools/lib/jcommon-1.0.18.jar')
+    implementation files('tools/lib/jna-4.4.0.jar')
+    implementation files('tools/lib/jpayment.jar')
+    implementation files('tools/lib/Verisign.jar')
+    implementation files('tools/lib/oracle.jar')
+    implementation files('tools/lib/barbecue-1.5-beta1.jar')
+    implementation files('tools/lib/mail.jar')
+    implementation files('tools/lib/sardine-5.9-SNAPSHOT.jar')
+    implementation files('tools/lib/copyLibraries.bat')
+    implementation files('tools/lib/mariadb-java-client.jar')
+    implementation files('tools/lib/groovy-engine.jar')
+    implementation files('tools/lib/c3p0-oracle-thin-extras-0.9.1.2.jar')
+    implementation files('tools/lib/xjavadoc-1.1.jar')
+    implementation files('tools/lib/standard.jar')
+    implementation files('tools/lib/junit.jar')
+    implementation files('tools/lib/wizard.jar')
+    implementation files('tools/lib/httpmime-4.5.6.jar')
+    implementation files('tools/lib/icepdf-viewer-6.2.2.jar')
+    implementation files('tools/lib/itext-pdfa-5.5.2.jar')
+    implementation files('tools/lib/xmlbeans-2.6.0.jar')
+    implementation files('tools/lib/commons-io.jar')
+    implementation files('tools/lib/zxing-2.3.0.jar')
+    implementation files('tools/lib/jfreechart-1.0.15.jar')
+    implementation files('tools/lib/layout-7.1.1.jar')
+    implementation files('tools/lib/cglib.jar')
+    implementation files('tools/lib/servlet-api.jar')
+    implementation files('tools/lib/harness-1.0.0.jar')
+    implementation files('tools/lib/mysql-connector-java-5.1.13-bin.jar')
+    implementation files('tools/lib/itextpdf-5.5.2.jar')
+    implementation files('tools/lib/script-api.jar')
+    implementation files('tools/lib/iText-2.1.7.jar')
+    implementation files('tools/lib/jython-engine.jar')
+    implementation files('tools/lib/xml-apis-ext-1.3.04.jar')
+    implementation files('tools/lib/itext-carriage-0.8.0.jar')
+    implementation files('tools/lib/kernel-7.1.1.jar')
+    implementation files('tools/lib/activemq-core-5.7.0.jar')
+    implementation files('tools/lib/org.krysalis.barcode4j_2.1.0.jar')
+    implementation files('tools/lib/swingx-1.6.jar')
+    implementation files('tools/lib/poi-3.17.jar')
+    implementation files('tools/lib/cron4j-2.2.1.jar')
+    implementation files('tools/lib/payflow.jar')
+    implementation files('tools/lib/javaee.jar')
+    implementation files('tools/lib/logkit.jar')
+    implementation files('tools/lib/poi-ooxml-3.17.jar')
+    implementation files('tools/lib/slf4j-api-1.6.0.jar')
+    implementation files('tools/lib/ooxml-schemas-1.3.jar')
+    implementation files('tools/lib/jna-platform-4.4.0.jar')
+    implementation files('tools/lib/testing/spiffy-with_source-all-0.05.jar')
+    implementation files('tools/lib/testing/itextpdf-5.5.2-sources.jar')
+    implementation files('tools/lib/testing/commons-validator-1.6-sources.jar')
+    implementation files('tools/lib/testing/groovy-all-2.4.15-sources.jar')
+    implementation files('tools/lib/testing/SuperCSV-with_src-1.52.jar')
+    implementation files('tools/lib/testing/harness-1.0.0-sources.jar')
+    implementation files('tools/lib/ant-commons-net.jar')
+    implementation files('tools/lib/commons-collections-3.2.2.jar')
+    implementation files('tools/lib/commons-logging-1.2.jar')
+    implementation files('tools/lib/zxing-2.3.0-LICENSE.txt')
+    implementation files('tools/lib/bsh-engine.jar')
+    implementation files('tools/lib/groovy-all-2.4.15.jar')
+    implementation files('tools/lib/ant-contrib-1.0b1.jar')
+    implementation files('tools/lib/javax.inject-1.jar')
+    implementation files('tools/lib/lablib-checkboxtree-3.3.jar')
+    implementation files('tools/lib/libraries.txt')
+    implementation files('tools/lib/c3p0-0.9.1.2.jar')
+    implementation files('tools/lib/jgraph.jar')
+    implementation files('tools/lib/bsh-2.0b6.jar')
+    implementation files('tools/lib/commons-validator-1.6.jar')
+
+
+    implementation files('zkwebui/WEB-INF/lib/asm.jar')
+    implementation files('zkwebui/WEB-INF/lib/bsh.jar')
+    implementation files('zkwebui/WEB-INF/lib/cglib.jar')
+    implementation files('zkwebui/WEB-INF/lib/commons-el.jar')
+    implementation files('zkwebui/WEB-INF/lib/commons-fileupload.jar')
+    implementation files('zkwebui/WEB-INF/lib/commons-io.jar')
+    implementation files('zkwebui/WEB-INF/lib/fckez.jar')
+    implementation files('zkwebui/WEB-INF/lib/Filters.jar')
+    implementation files('zkwebui/WEB-INF/lib/gmapsz.jar')
+    implementation files('zkwebui/WEB-INF/lib/jruby.jar')
+    implementation files('zkwebui/WEB-INF/lib/js.jar')
+    implementation files('zkwebui/WEB-INF/lib/json_simple.jar')
+    implementation files('zkwebui/WEB-INF/lib/junit.jar')
+    implementation files('zkwebui/WEB-INF/lib/jxl.jar')
+    implementation files('zkwebui/WEB-INF/lib/jython.jar')
+    implementation files('zkwebui/WEB-INF/lib/keylistener.jar')
+    implementation files('zkwebui/WEB-INF/lib/mvel.jar')
+    implementation files('zkwebui/WEB-INF/lib/ognl.jar')
+    implementation files('zkwebui/WEB-INF/lib/timelinez.jar')
+    implementation files('zkwebui/WEB-INF/lib/timelinez-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/timeplotz.jar')
+    implementation files('zkwebui/WEB-INF/lib/xercesImpl.jar')
+    implementation files('zkwebui/WEB-INF/lib/zcommon.jar')
+    implementation files('zkwebui/WEB-INF/lib/zcommons-el.jar')
+    implementation files('zkwebui/WEB-INF/lib/zcommon-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zhtml.jar')
+    implementation files('zkwebui/WEB-INF/lib/zhtml-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkex.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkex-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zk.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkmax.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkmax-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkplus.jar')
+    implementation files('zkwebui/WEB-INF/lib/zkplus-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zk-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zml.jar')
+    implementation files('zkwebui/WEB-INF/lib/zml-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zul.jar')
+    implementation files('zkwebui/WEB-INF/lib/zul-sources.jar')
+    implementation files('zkwebui/WEB-INF/lib/zweb.jar')
+    implementation files('zkwebui/WEB-INF/lib/zweb-sources.jar')
+
+
+    implementation files('org.adempiere.webservice/WEB-INF/lib/activation-1.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/ant-1.5.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/avalon-framework-4.1.3.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/classworlds-1.1-alpha-2.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-attributes-api-2.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-beanutils-1.6.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-codec-1.3.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-collections-2.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-digester-1.7.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-httpclient-3.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/commons-logging-1.0.4.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/dom4j-1.6.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/generated_xmlbeans.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/generated_xmlbeans-sources.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jaxen-1.1-beta-9.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jboss-1.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jcommon-1.0.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jdom-1.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jdtcore-3.1.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/jsr173_1.0_api.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/junit-3.8.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/log4j-1.2.12.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/logkit-1.0.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/mail-1.4.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/plexus-container-default-1.0-alpha-8.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/plexus-utils-1.0.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/plexus-utils-1.0.4.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/qdox-1.5.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/spring-1.2.6.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/stax-1.1.2-dev.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/stax-api-1.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/stax-utils-20040917.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/wagon-provider-api-1.0-alpha-5.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/wsdl4j-1.5.2.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/wstx-asl-2.9.3.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xbean.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xbean-spring-2.8.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xercesImpl-2.4.0.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xfire-all-1.2.6.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xfire-all-1.2.6-sources.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xml-apis-1.3.02.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xmlbeans-2.4.0-sources.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xmlParserAPIs-2.6.2.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/xml-resolver-1.1.jar')
+    implementation files('org.adempiere.webservice/WEB-INF/lib/XmlSchema-1.0.3.jar')
+
+    implementation files('lib/CCTools.jar')
+
+
+
+
+    implementation group: 'junit', name: 'junit', version: '3.8.2'
+
+
+    // https://mvnrepository.com/artifact/net.sf.supercsv/super-csv
+    compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+
+
+    sourceSets {
+        main.java.srcDirs = []
+
+        main.java.srcDirs += 'base/src'
+        main.java.srcDirs += 'org.adempiere.project/src/main/java'
+        main.java.srcDirs += 'org.adempiere.request/src/main/java'
+        main.java.srcDirs += 'glassfishfacet/src'
+        main.java.srcDirs += 'jbossfacet/src'
+        main.java.srcDirs += 'client/src'
+        main.java.srcDirs += 'sqlj/src'
+        main.java.srcDirs += 'install/src'
+        main.java.srcDirs += 'extend/src'
+        main.java.srcDirs += 'serverRoot/src/main/ejb'
+        main.java.srcDirs += 'serverRoot/src/main/server'
+        main.java.srcDirs += 'serverRoot/src/main/servlet'
+        main.java.srcDirs += 'serverApps/src/main/servlet'
+        main.java.srcDirs += 'zkwebui/WEB-INF/src'
+        main.java.srcDirs += 'JasperReports/src'
+        main.java.srcDirs += 'JasperReportsWebApp/src'
+        main.java.srcDirs += 'tools/src'
+        main.java.srcDirs += 'webCM/src/main/servlet'
+        main.java.srcDirs += 'migration/src'
+        main.java.srcDirs += 'org.eevolution.cashflow/src/main/java'
+        main.java.srcDirs += 'org.eevolution.hr_and_payroll/src/main/java/base'
+        main.java.srcDirs += 'org.eevolution.hr_and_payroll/src/main/java/ui/swing'
+        main.java.srcDirs += 'org.eevolution.hr_and_payroll/src/main/java/ui/zk'
+        main.java.srcDirs += 'org.spin.hr_time_and_attendance/src/main/java/base'
+        main.java.srcDirs += 'org.eevolution.manufacturing/src/main/java/base'
+        main.java.srcDirs += 'org.eevolution.manufacturing/src/main/java/test'
+        main.java.srcDirs += 'org.eevolution.manufacturing/src/main/java/ui/swing'
+        main.java.srcDirs += 'org.eevolution.manufacturing/src/main/java/ui/zk'
+        main.java.srcDirs += 'org.eevolution.warehouse/src/main/java/base'
+        main.java.srcDirs += 'org.adempiere.asset/src/main/java/base'
+        main.java.srcDirs += 'org.adempiere.webservice/WEB-INF/src'
+        main.java.srcDirs += 'com.kkalice.adempiere.migrate/src'
+        main.java.srcDirs += 'org.adempiere.test/src/test/scala'
+        main.java.srcDirs += 'org.adempiere.test/src/main/scala'
+        main.java.srcDirs += 'org.adempiere.test/src/test/sahi'
+        main.java.srcDirs += 'org.adempiere.pos/src/main/java/base'
+        main.java.srcDirs += 'org.adempiere.pos/src/main/java/ui/swing'
+        main.java.srcDirs += 'org.adempiere.pos/src/main/java/ui/zk'
+        main.java.srcDirs += 'org.eevolution.freight/src/main/java/base'
+        main.java.srcDirs += 'org.adempiere.production/src/main/java/base'
+        main.java.srcDirs += 'org.eevolution.fleet/src/main/java/base'
+        main.java.srcDirs += 'org.adempiere.crm/src/main/java'
+        main.java.srcDirs += 'org.eevolution.warehouse/src/main/java/ui/zk'
+        main.java.srcDirs += 'org.spin.loan_management/src/main/java/base'
+        main.java.srcDirs += 'org.spin.loan_management/src/main/java/ui/zk'
+        main.java.srcDirs += 'org.spin.loan_management/src/main/java/ui/swing'
+        main.java.srcDirs += 'org.spin.finance_management/src/main/java/base'
+    }
+}
