@@ -30,6 +30,7 @@ import org.compiere.model.MRMALine;
 import org.compiere.model.PO;
 import org.compiere.model.Query;
 import org.compiere.model.X_M_RMAType;
+import org.compiere.model.MBankStatement;
 import org.compiere.process.DocAction;
 import org.compiere.process.ProcessInfo;
 import org.compiere.util.Msg;
@@ -80,7 +81,7 @@ public class ReverseTheSalesTransaction extends ReverseTheSalesTransactionAbstra
 
         //Cancel original payment
         for (MPayment payment :cancelPayments(sourceOrder, today))
-             addLog(payment.getDocumentInfo());
+            addLog(payment.getDocumentInfo());
 
         sourceOrder.processIt(DocAction.ACTION_Close);
         sourceOrder.saveEx();
@@ -203,7 +204,8 @@ public class ReverseTheSalesTransaction extends ReverseTheSalesTransactionAbstra
         List<MPayment> sourcePayments = MPayment.getOfOrder(sourceOrder);
         for (MPayment sourcePayment : sourcePayments)
         {
-            MPayment payment = new MPayment(sourceOrder.getCtx() ,  0 , sourceOrder.get_TrxName());
+            //Openup. Nicolas Sarlabos. 23/06/2020. #14239.
+            /*MPayment payment = new MPayment(sourceOrder.getCtx() ,  0 , sourceOrder.get_TrxName());
             PO.copyValues(sourcePayment, payment);
             payment.setDateTrx(today);
             payment.setC_Order_ID(sourceOrder.getC_Order_ID());
@@ -218,9 +220,35 @@ public class ReverseTheSalesTransaction extends ReverseTheSalesTransactionAbstra
 
             payment.processIt(DocAction.ACTION_Complete);
             payment.saveEx();
-            payments.add(payment);
+            payments.add(payment);*/
+
+            sourcePayment.processIt(DocAction.ACTION_Reverse_Correct);
+
+            MPayment reversalPayment = getReversal(sourcePayment);
+
+            if(reversalPayment != null && reversalPayment.get_ID() > 0)
+                MBankStatement.addPayment(reversalPayment);
+
+            payments.add(reversalPayment);
+            //Fin #14239.
+
         }
         return payments;
+    }
+
+
+    /**
+     * Openup. Nicolas Sarlabos. 23/06/2020. #14239.
+     * Funcion que devuelve el documento reverso para el payment recibido por parametro.
+     * @return
+     */
+    public static MPayment getReversal(MPayment payment)
+    {
+        MPayment pay = new Query(payment.getCtx() , MPayment.Table_Name , MPayment.COLUMNNAME_Reversal_ID + "=?", payment.get_TrxName())
+                .setParameters(payment.get_ID())
+                .firstOnly();
+
+        return pay;
     }
 
     /**
