@@ -208,6 +208,10 @@
       <sourceFolder url="file://$MODULE_DIR$/org.adempiere.pos/src/main/java/ui/zk" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/org.adempiere.request/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/org.adempiere.project/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/org.spin.financial_management/src/main/java/base" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/org.spin.loan_management/src/main/java/base" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/org.spin.loan_management/src/main/java/ui/swing" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/org.spin.loan_management/src/main/java/ui/zk" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
@@ -1304,6 +1308,106 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/packages/WarehouseManagement.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/Adempiere.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/adempiereApps.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/adempiereApps.war!/" />
+          <root url="jar://$MODULE_DIR$/lib/adempiereRoot.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/adempiereWebCMbase.war!/" />
+          <root url="jar://$MODULE_DIR$/lib/CompiereJasperReqs.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/glassfish.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jboss.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/mariadb-java-client.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/migrate.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/mobile.war!/" />
+          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-5.1.13-bin.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/oracle.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/postgresql.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/webui.war!/" />
+          <root url="jar://$MODULE_DIR$/lib/CCTools.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/CSTools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/CCTools.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/CCTools.jar!/Lib" />
+          <root url="jar://$MODULE_DIR$/lib/CSTools.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/CSTools.jar!/Lib" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/tools/lib/ant-contrib-1.0b1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/cglib.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/commons-codec-1.10.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/commons-collections4-4.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/groovy-all-2.4.15.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/harness-1.0.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/icepdf-core-6.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/icepdf-viewer-6.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/io-7.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/itext-carriage-0.8.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/itext-pdfa-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/itextpdf-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/javax.inject-1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/kernel-7.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/lablib-checkboxtree-3.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/layout-7.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/logkit.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/pdfa-7.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/poi-3.17.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/poi-ooxml-3.17.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/slf4j-api-1.6.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/wizard.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/xmlbeans-2.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/tools/lib/icepdf-viewer-6.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/tools/lib/jython.jar!/Lib" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/JasperReportsTools/lib/commons-beanutils-1.9.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/JasperReportsTools/lib/commons-digester-2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/JasperReportsTools/lib/jasperreports-6.6.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/JasperReportsTools/lib/jfreechart-1.0.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
