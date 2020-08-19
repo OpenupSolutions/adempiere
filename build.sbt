@@ -26,7 +26,7 @@ scalaVersion := "2.13.1"
 resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 
 fork := true
-val adempiereProperties = "-DPropertyFile=/Users/e-Evolution/AdempierePG.properties"
+val adempiereProperties = "-DPropertyFile=/<PATH_TO>/AD_DebugWeb.properties"
 //scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation", "-encoding" , "utf8")
 javaOptions in Test := Seq (adempiereProperties)
 
@@ -51,7 +51,7 @@ test in assembly := {}
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = true, includeDependency =false)
 
 val sourceDirectoryTest = "org.adempiere.test"
-val sourceAdempiere = "/Users/e-Evolution/Develop/ADempiere/develop"
+val sourceAdempiere = "/<ADEMPIERE_SOURCE>"
 
 //javaSource in Compile := baseDirectory.value  / sourceDirectoryTest / "src" / "main" / "java"
 //javaSource in Test := baseDirectory.value  / sourceDirectoryTest / "src" / "test" / "java"
@@ -90,6 +90,8 @@ sourceDirectory in webappPrepare := (sourceDirectory in Compile).value / "zkwebu
 
 webappPostProcess := {
   webappDir: File =>
+    IO.copyDirectory(file("/<OTHER_PROJECT>/build/classes/zk/WEB-INF/classes"), webappDir / "WEB-INF" / "classes")
+    IO.copyDirectory(file("/<OTHER_PROJECT>/build/classes/base"), webappDir / "WEB-INF" / "classes")
     IO.copyDirectory(baseDirectory.value / "bin", webappDir / "WEB-INF" / "classes")
     IO.copyDirectory(baseDirectory.value / "org.eevolution.manufacturing/src/main/java/ui/zk",webappDir / "WEB-INF" / "classes")
     IO.copyDirectory(baseDirectory.value / "org.eevolution.hr_and_payroll/src/main/java/ui/zk",webappDir / "WEB-INF" / "classes")
