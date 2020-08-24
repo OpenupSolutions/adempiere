@@ -42,22 +42,20 @@ public abstract class ReverseTheSalesTransactionAbstract extends SvrProcess {
 	public static final String C_DOCTYPERMA_ID = "C_DocTypeRMA_ID";
 	/**	Parameter Value for Order	*/
 	private int orderId;
-	/**	Parameter Value for Invoice Partner	*/
-	private int bPartnerId;
-	/**	Parameter Value for Cancelled	*/
+	/**	Parameter Value for invoicePartnerId	*/
+	private int invoicePartnerId;
+	/**	Parameter Value for isCancelled	*/
 	private boolean isCancelled;
-	/**	Parameter Value for Ship/Receipt Confirmation	*/
-	private boolean isShipConfirm;
-	/**	Parameter Value for Document Type for Return Order	*/
-	private int docTypeRMAId;
+	/**	Parameter Value for isShipReceiptConfirmation	*/
+	private boolean isShipReceiptConfirmation;
+
 
 	@Override
 	protected void prepare() {
 		orderId = getParameterAsInt(C_ORDER_ID);
-		bPartnerId = getParameterAsInt(BILL_BPARTNER_ID);
+		invoicePartnerId = getParameterAsInt(BILL_BPARTNER_ID);
 		isCancelled = getParameterAsBoolean(ISCANCELLED);
-		isShipConfirm = getParameterAsBoolean(ISSHIPCONFIRM);
-		docTypeRMAId = getParameterAsInt(C_DOCTYPERMA_ID);
+		isShipReceiptConfirmation = getParameterAsBoolean(ISSHIPCONFIRM);
 	}
 
 	/**	 Getter Parameter Value for Order	*/
@@ -65,19 +63,9 @@ public abstract class ReverseTheSalesTransactionAbstract extends SvrProcess {
 		return orderId;
 	}
 
-	/**	 Setter Parameter Value for Order	*/
-	protected void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-
-	/**	 Getter Parameter Value for Invoice Partner	*/
-	protected int getBPartnerId() {
-		return bPartnerId;
-	}
-
-	/**	 Setter Parameter Value for Invoice Partner	*/
-	protected void setBPartnerId(int bPartnerId) {
-		this.bPartnerId = bPartnerId;
+	/**	 Getter Parameter Value for invoicePartnerId	*/
+	protected int getInvoicePartnerId() {
+		return invoicePartnerId;
 	}
 
 	/**	 Getter Parameter Value for Cancelled	*/
@@ -85,29 +73,9 @@ public abstract class ReverseTheSalesTransactionAbstract extends SvrProcess {
 		return isCancelled;
 	}
 
-	/**	 Setter Parameter Value for Cancelled	*/
-	protected void setIsCancelled(boolean isCancelled) {
-		this.isCancelled = isCancelled;
-	}
-
-	/**	 Getter Parameter Value for Ship/Receipt Confirmation	*/
-	protected boolean isShipConfirm() {
-		return isShipConfirm;
-	}
-
-	/**	 Setter Parameter Value for Ship/Receipt Confirmation	*/
-	protected void setIsShipConfirm(boolean isShipConfirm) {
-		this.isShipConfirm = isShipConfirm;
-	}
-
-	/**	 Getter Parameter Value for Document Type for Return Order	*/
-	protected int getDocTypeRMAId() {
-		return docTypeRMAId;
-	}
-
-	/**	 Setter Parameter Value for Document Type for Return Order	*/
-	protected void setDocTypeRMAId(int docTypeRMAId) {
-		this.docTypeRMAId = docTypeRMAId;
+	/**	 Getter Parameter Value for isShipReceiptConfirmation	*/
+	protected boolean isShipReceiptConfirmation() {
+		return isShipReceiptConfirmation;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/
