@@ -444,6 +444,10 @@ public class MBankStatement extends X_C_BankStatement implements DocAction
 			approveIt();
 		log.info("completeIt - " + toString());
 		StringBuffer linesWithoutReference = new StringBuffer();
+
+		//Openup. Nicolas Sarlabos. 24/08/2020. #14567.
+		final boolean[] IsChanged = {false};
+
 		Arrays.asList(getLines(true)).stream()
 			.filter(statementLine -> statementLine.getC_Payment_ID() == 0)
 			.forEach(statementLine -> {
@@ -456,35 +460,45 @@ public class MBankStatement extends X_C_BankStatement implements DocAction
 				//	Reference No
 				if(!Util.isEmpty(statementLine.getReferenceNo())) {
 					displayValue.append(" - @ReferenceNo@: ").append(statementLine.getReferenceNo());
+					IsChanged[0] = true;
 				}
 				//	Memo
 				if(!Util.isEmpty(statementLine.getMemo())) {
 					displayValue.append(" - @Memo@: ").append(statementLine.getMemo());
+					IsChanged[0] = true;
 				}
 				//	EFT Check No
 				if(!Util.isEmpty(statementLine.getEftCheckNo())) {
 					displayValue.append(" - @EftCheckNo@: ").append(statementLine.getEftCheckNo());
+					IsChanged[0] = true;
 				}
 				if(!Util.isEmpty(statementLine.getEftMemo())) {
 					displayValue.append(" - @EftMemo@: ").append(statementLine.getEftMemo());
+					IsChanged[0] = true;
 				}
 				//	Add amount
 				if (statementLine.getTrxAmt().compareTo(Env.ZERO) != 0) {
 					displayValue.append(" - @TrxAmt@: ").append(DisplayType.getNumberFormat(DisplayType.Amount).format(statementLine.getTrxAmt()));
+					IsChanged[0] = true;
 				}
 				if (statementLine.getChargeAmt().compareTo(Env.ZERO) != 0) {
-					displayValue.append(" - @ChargeAmt@: ").append(DisplayType.getNumberFormat(DisplayType.Amount).format(statementLine.getChargeAmt()));
+					if(!this.getC_BankAccount().getBankAccountType().equals(MBankAccount.BANKACCOUNTTYPE_Checking)){
+						displayValue.append(" - @ChargeAmt@: ").append(DisplayType.getNumberFormat(DisplayType.Amount).format(statementLine.getChargeAmt()));
+						IsChanged[0] = true;
+					}
 				}
 				if (statementLine.getInterestAmt().compareTo(Env.ZERO) != 0) {
 					displayValue.append(" - @InterestAmt@: ").append(DisplayType.getNumberFormat(DisplayType.Amount).format(statementLine.getInterestAmt()));
+					IsChanged[0] = true;
 				}
 				//	Add info
 				linesWithoutReference.append(displayValue);
 		});
 		//	Validate
-		if(linesWithoutReference.length() > 0) {
+		if(linesWithoutReference.length() > 0 && IsChanged[0]) {
 			throw new AdempiereException("@Error@" + Env.NL + " @C_Payment_ID@ @NotFound@ " + Env.NL + linesWithoutReference.toString());
-		}
+		}//Fin #14567.
+
 		//	Set Payment reconciled
 		MBankStatementLine[] lines = getLines(false);
 		for (int i = 0; i < lines.length; i++)
