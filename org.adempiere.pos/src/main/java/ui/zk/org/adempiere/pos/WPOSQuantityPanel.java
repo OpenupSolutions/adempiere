@@ -255,9 +255,10 @@ public class WPOSQuantityPanel extends WPOSSubPanel implements POSPanelInterface
 	        					return;
 	        				posPanel.setDiscountPercentage(value);
 	        			}
-	        		}
-		        	posPanel.setQty(value);
-		        } else if(posPanel.isAddQty() 
+	        		} else if (e.getTarget().equals(fieldQuantity.getDecimalbox())) {
+		        		posPanel.setQty(value);
+				}
+		        } else if(posPanel.isAddQty()
 		              || Events.ON_CHANGE.equals(e.getName())){
 		            //  Verify if it add or set
 		        	if(posPanel.isAddQty()) {
