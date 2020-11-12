@@ -773,12 +773,19 @@ public class Collect {
 		//	Save Cash Payment
 		//	Validate if payment consists credit card or cash -> payment amount must be exact
 		BigDecimal amountRefunded = openAmt.subtract(otherPayment.get().add(cashPayment.get()));
-		if(amountRefunded.signum() == -1
+
+		//Openup. Nicolas Sarlabos. 12/11/2020. #15045.
+		if (amountRefunded.compareTo(Env.ZERO) != 0)
+			addErrorMsg("Importe del Pago debe ser Exacto");
+
+		/*if(amountRefunded.signum() == -1
 				&& cashPayment.get().doubleValue() > 0) {
 			if(amountRefunded.abs().doubleValue() > cashPayment.get().doubleValue()) {
 				addErrorMsg("@POS.validatePayment.PaymentBustBeExact@");
 			}
-		}
+		}*/
+		//Fin #15045.
+
 		collectDetails
 //		.stream()
 //		.filter(collect -> collect.getTenderType().equals(X_C_Payment.TENDERTYPE_DirectDebit) 
