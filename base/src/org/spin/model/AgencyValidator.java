@@ -51,13 +51,6 @@ public class AgencyValidator implements ModelValidator
 	/** Client			*/
 	private int		clientId = -1;
 
-	//Openup. Nicolas Sarlabos. 04/08/2020. #14418.
-	private int DOCTYPE_SO_MEDIACOM_INVENTARIO_ID = 1000182;
-	private int DOCTYPE_SO_MEDIACOM_XAXIS_ID = 1000183;
-	private int USER1_GROUPM_INVENTARIO_ID = 1000269;
-	private int USER1_XAXIS_ID = 1000226;
-	//Fin #14418.
-
 	public void initialize (ModelValidationEngine engine, MClient client) {
 		if (client != null) {	
 			clientId = client.getAD_Client_ID();
@@ -388,24 +381,6 @@ public class AgencyValidator implements ModelValidator
 						if(projectPhase.get_ValueAsInt("CUST_MediaType_ID") != 0)
 							orderLine.set_ValueOfColumn("CUST_MediaType_ID", projectPhase.get_ValueAsInt("CUST_MediaType_ID"));
 					}
-
-					//Openup. Nicolas Sarlabos. 04/08/2020. #14418.
-					if(docType.get_ID() == DOCTYPE_SO_MEDIACOM_INVENTARIO_ID){
-						orderLine.set_ValueOfColumn("User1_ID", USER1_GROUPM_INVENTARIO_ID);
-					} else if(docType.get_ID() == DOCTYPE_SO_MEDIACOM_XAXIS_ID){
-						orderLine.set_ValueOfColumn("User1_ID", USER1_XAXIS_ID);
-					}//Fin #14418.
-
-					//Openup. Nicolas Sarlabos. 22/10/2020. #14912.
-					if (orderLine.getLink_OrderLine_ID() > 0) {
-						MOrderLine linkOrderLine = (MOrderLine) orderLine.getLink_OrderLine();
-						MOrder linkOrder = (MOrder) linkOrderLine.getC_Order();
-
-						if (linkOrder.getC_DocTypeTarget_ID() == DOCTYPE_SO_MEDIACOM_XAXIS_ID
-								|| linkOrder.getC_DocTypeTarget_ID() == DOCTYPE_SO_MEDIACOM_INVENTARIO_ID) {
-							orderLine.setUser1_ID(linkOrderLine.getUser1_ID());
-						}
-					}//Fin #14912.
 
 				} else if(po instanceof MOrder) {
 					MOrder order = (MOrder) po;
